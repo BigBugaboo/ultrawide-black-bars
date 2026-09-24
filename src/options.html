@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ultrawide Black Bars</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body class="welcome settings">
+    <main>
+      <h1>Ultrawide Black Bars</h1>
+      <p id="settings-title"></p>
+      <div class="settings-body">
+        <nav id="settings-nav" class="settings-nav">
+          <button type="button" id="nav-mode" data-panel="mode" aria-controls="panel-mode"></button>
+          <button type="button" id="nav-language" data-panel="language" aria-controls="panel-language"></button>
+          <button type="button" id="nav-shortcuts" data-panel="shortcuts" aria-controls="panel-shortcuts"></button>
+          <button type="button" id="nav-appearance" data-panel="appearance" aria-controls="panel-appearance"></button>
+          <button type="button" id="nav-future" data-panel="future" aria-controls="panel-future"></button>
+        </nav>
+        <div class="settings-panels">
+          <section class="settings-panel" id="panel-mode" data-panel="mode" aria-labelledby="nav-mode">
+            <div class="modes" id="modes">
+              <button type="button" data-mode="original"></button>
+              <button type="button" data-mode="ambient"></button>
+              <div id="blur-group" hidden>
+                <p class="field-label" id="blur-label"></p>
+                <div class="modes" id="blur">
+                  <button type="button" data-blur="soft"></button>
+                  <button type="button" data-blur="medium"></button>
+                  <button type="button" data-blur="strong"></button>
+                </div>
+              </div>
+              <button type="button" data-mode="crop"></button>
+            </div>
+          </section>
+          <section class="settings-panel" id="panel-language" data-panel="language" aria-labelledby="nav-language" hidden>
+            <div class="language-filter">
+              <input id="language-search" class="language-search" type="search" placeholder="Search languages" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search languages" aria-controls="languages" />
+              <p id="language-empty" class="language-empty" hidden></p>
+            </div>
+            <div class="modes" id="languages">
+              <button type="button" data-locale="en">English</button>
+              <button type="button" data-locale="zh_CN">简体中文</button>
+              <button type="button" data-locale="zh_TW">繁體中文</button>
+              <button type="button" data-locale="ja">日本語</button>
+              <button type="button" data-locale="ko">한국어</button>
+              <button type="button" data-locale="es">Español</button>
+              <button type="button" data-locale="fr">Français</button>
+              <button type="button" data-locale="de">Deutsch</button>
+              <button type="button" data-locale="pt">Português</button>
+              <button type="button" data-locale="ru">Русский</button>
+              <button type="button" data-locale="it">Italiano</button>
+              <button type="button" data-locale="tr">Türkçe</button>
+              <button type="button" data-locale="vi">Tiếng Việt</button>
+              <button type="button" data-locale="id">Bahasa Indonesia</button>
+            </div>
+          </section>
+          <section class="settings-panel" id="panel-shortcuts" data-panel="shortcuts" aria-labelledby="nav-shortcuts" hidden>
+            <p id="shortcut-copy"></p>
+            <p class="field-label" id="shortcut-current-label"></p>
+            <p id="shortcut-current" class="shortcut-current"></p>
+            <p class="field-label" id="shortcut-capture-label"></p>
+            <div id="shortcut-capture" class="shortcut-capture" tabindex="0" role="textbox" aria-readonly="true"></div>
+            <p id="shortcut-pending" class="shortcut-pending"></p>
+            <p id="shortcut-error" class="shortcut-error" role="alert" hidden></p>
+            <p id="shortcut-saved" class="shortcut-saved" hidden></p>
+            <div class="shortcut-actions">
+              <button type="button" id="shortcut-save"></button>
+              <button type="button" id="shortcut-reset"></button>
+            </div>
+            <button type="button" class="link shortcut-browser" id="shortcut-browser"></button>
+            <p id="shortcut-browser-fallback" class="shortcut-fallback" hidden></p>
+          </section>
+          <section class="settings-panel" id="panel-appearance" data-panel="appearance" aria-labelledby="nav-appearance" hidden>
+            <div class="modes" id="themes">
+              <button type="button" data-theme="dark"></button>
+              <button type="button" data-theme="light"></button>
+              <button type="button" data-theme="auto"></button>
+            </div>
+            <div id="theme-times" hidden>
+              <label class="field" id="light-start-label" for="light-start"></label>
+              <input id="light-start" type="time" value="07:00" />
+              <label class="field" id="light-end-label" for="light-end"></label>
+              <input id="light-end" type="time" value="19:00" />
+            </div>
+          </section>
+          <section class="settings-panel" id="panel-future" data-panel="future" aria-labelledby="nav-future" hidden>
+            <p id="about-future"></p>
+            <a class="repo-link" id="repo-link" href="https://github.com/BigBugaboo/ultrawide-black-bars.git" target="_blank" rel="noopener noreferrer">https://github.com/BigBugaboo/ultrawide-black-bars.git</a>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script src="i18n.js"></script>
+    <script src="settings.js"></script>
+    <script src="theme.js"></script>
+    <script src="shortcuts.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

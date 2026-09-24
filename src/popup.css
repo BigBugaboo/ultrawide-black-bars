@@ -24,11 +24,11 @@ html[data-theme="light"] {
   --ubb-muted: #5a5a5a;
   --ubb-border: #d4d4d4;
   --ubb-button: #f4f4f4;
-  --ubb-active-border: #0099cc;
-  --ubb-active-bg: #e3f5fb;
+  --ubb-active-border: var(--ubb-accent);
+  --ubb-active-bg: color-mix(in srgb, var(--ubb-accent) 16%, white);
   --ubb-menu: #ffffff;
   --ubb-link: #5c5c5c;
-  --ubb-active-text: #0077a8;
+  --ubb-active-text: color-mix(in srgb, var(--ubb-accent) 72%, #04202a);
   --ubb-divider: #e6e6e6;
   --ubb-menu-text: #333333;
 }
@@ -83,8 +83,9 @@ button.link {
   top: calc(100% + 4px);
   right: 0;
   z-index: 5;
-  min-width: 148px;
+  min-width: 176px;
   max-height: 220px;
+  overscroll-behavior: contain;
   overflow-y: auto;
   padding: 4px;
   border: 1px solid var(--ubb-border);
@@ -336,8 +337,65 @@ body.welcome.settings #languages {
   align-content: start;
 }
 
+body.welcome.settings #languages {
+  max-height: min(360px, calc(100vh - 280px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  align-content: start;
+}
+
 body.welcome.settings #blur-group {
   margin-left: 14px;
+}
+
+.accents {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+
+.accents button {
+  height: 22px;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--swatch);
+}
+
+.accents button.active {
+  border-color: var(--ubb-text);
+  background: var(--swatch);
+}
+
+label.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html[dir="rtl"] .lang-menu button,
+html[dir="rtl"] .settings-nav button,
+html[dir="rtl"] .modes button {
+  text-align: right;
 }
 
 body.welcome.settings #blur-group .field-label {
