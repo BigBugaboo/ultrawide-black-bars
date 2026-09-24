@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "يزيل الأشرطة السوداء الجانبية لفيديو 16:9 على الشاشات فائقة العرض."
+  },
+  "commandCycle": {
+    "message": "التبديل بين الأصلي والإضاءة المحيطة والملء والتمديد"
+  }
+}

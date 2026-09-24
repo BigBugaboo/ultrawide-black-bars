@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Usuwa boczne czarne pasy przy wideo 16:9 na ekranach ultrawide."
+  },
+  "commandCycle": {
+    "message": "Przełączaj oryginał, otoczenie, wypełnienie i rozciągnięcie"
+  }
+}

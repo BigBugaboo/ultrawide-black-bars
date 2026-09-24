@@ -17,8 +17,13 @@
 
 .ubb-player.ubb-crop .ubb-scale-target,
 .ubb-player.ubb-zoom .ubb-scale-target {
-  transform: translate(var(--ubb-pan-x, 0px), var(--ubb-pan-y, 0px)) scale(calc(var(--ubb-scale, 1) * var(--ubb-user-scale, 1)));
-  transform-origin: var(--ubb-origin-x, 50%) var(--ubb-origin-y, 50%);
+  transform: translate(var(--ubb-pan-x, 0px), var(--ubb-pan-y, 0px))
+    scale(var(--ubb-scale-x, calc(var(--ubb-scale, 1) * var(--ubb-user-scale, 1))), var(--ubb-scale-y, var(--ubb-scale-x, calc(var(--ubb-scale, 1) * var(--ubb-user-scale, 1)))));
+  transform-origin: center center;
+}
+
+video.ubb-sharpen {
+  filter: url(#ubb-ext-sharpen);
 }
 
 .bpx-player-video-area {
@@ -36,7 +41,9 @@
 }
 
 .bpx-player-video-area.ubb-ambient .ubb-bar,
-.ubb-player.ubb-ambient .ubb-bar {
+.ubb-player.ubb-ambient .ubb-bar,
+.bpx-player-video-area.ubb-music .ubb-bar,
+.ubb-player.ubb-music .ubb-bar {
   display: block;
 }
 
@@ -88,6 +95,30 @@
   display: block;
   filter: blur(var(--ubb-blur, 20px));
   transform: scale(1.12);
+}
+
+.ubb-player.ubb-music .ubb-bar-left,
+.ubb-player.ubb-music .ubb-bar-right,
+.bpx-player-video-area.ubb-music .ubb-bar-left,
+.bpx-player-video-area.ubb-music .ubb-bar-right {
+  z-index: 6;
+  background: transparent;
+  bottom: 0;
+  border-radius: 0;
+}
+
+.ubb-player.ubb-music .ubb-bar canvas,
+.bpx-player-video-area.ubb-music .ubb-bar canvas {
+  filter: none;
+  transform: none;
+  border-radius: 0;
+}
+
+.ubb-player.ubb-music .ubb-bar-top,
+.ubb-player.ubb-music .ubb-bar-bottom,
+.bpx-player-video-area.ubb-music .ubb-bar-top,
+.bpx-player-video-area.ubb-music .ubb-bar-bottom {
+  display: none;
 }
 
 .ubb-toast {

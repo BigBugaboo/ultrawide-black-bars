@@ -1,6 +1,6 @@
 (function (root) {
   var BLUR_PX = { soft: 12, medium: 20, strong: 32 };
-  var MODES = ["original", "ambient", "crop", "stretch"];
+  var MODES = ["original", "ambient", "music", "crop"];
   var ACCENTS = [
     { id: "cyan", color: "#00aeec" },
     { id: "blue", color: "#3b82f6" },
@@ -45,12 +45,18 @@
   };
 
   function normalizeMode(mode) {
-    if (mode === "original" || mode === "ambient" || mode === "crop" || mode === "stretch") return mode;
+    if (mode === "stretch") return "crop";
+    if (mode === "original" || mode === "ambient" || mode === "music" || mode === "crop") return mode;
     return "ambient";
   }
 
   function legacyEnabledOff(value) {
     return value === false || value === "false" || value === 0;
+  }
+
+  function normalizeMusicStyle(value) {
+    if (value === "bars" || value === "drops" || value === "breath") return value;
+    return "bars";
   }
 
   function normalizeBlur(value) {
@@ -141,6 +147,7 @@
       if (!item || typeof item !== "object") continue;
       var entry = {};
       if (item.mode) entry.mode = normalizeMode(item.mode);
+      if (item.userScale != null) entry.userScale = normalizeZoom(item.userScale);
       if (item.zoom != null) entry.zoom = normalizeZoom(item.zoom);
       if (item.panX != null) entry.panX = normalizePan(item.panX);
       if (item.panY != null) entry.panY = normalizePan(item.panY);
@@ -151,6 +158,25 @@
 
   function siteMemoryKey(hostname) {
     return String(hostname || "").trim().toLowerCase();
+  }
+
+  function updateSitePrefs(existing, hostname, patch) {
+    var map = Object.assign({}, existing || {});
+    var key = siteMemoryKey(hostname);
+    if (!key) return map;
+    map[key] = Object.assign({}, map[key] || {}, patch || {});
+    if (map[key].userScale != null) map[key].userScale = normalizeZoom(map[key].userScale);
+    if (map[key].panX != null) map[key].panX = normalizePan(map[key].panX);
+    if (map[key].panY != null) map[key].panY = normalizePan(map[key].panY);
+    if (map[key].mode) map[key].mode = normalizeMode(map[key].mode);
+    return map;
+  }
+
+  function readSitePrefs(raw, hostname) {
+    var map = raw && raw.sitePrefs;
+    if (!map || typeof map !== "object") return null;
+    var key = siteMemoryKey(hostname);
+    return map[key] || null;
   }
 
   function dropQuery(key) {
@@ -190,6 +216,7 @@
       mode: dropEnabled ? "original" : normalizeMode(raw.mode),
       locale: normalizeLocale(raw.locale),
       ambientBlur: normalizeBlur(raw.ambientBlur),
+      musicStyle: normalizeMusicStyle(raw.musicStyle),
       welcomeAck: raw.welcomeAck === true,
       dropEnabled: dropEnabled,
       theme: normalizeTheme(raw.theme),
@@ -204,6 +231,7 @@
       panY: normalizePan(raw.panY),
       siteMemory: normalizeMemoryMap(raw.siteMemory),
       pageMemory: normalizeMemoryMap(raw.pageMemory),
+      sitePrefs: normalizeMemoryMap(raw.sitePrefs),
     };
   }
 
@@ -243,6 +271,8 @@
     isLightAt: isLightAt,
     siteMemoryKey: siteMemoryKey,
     pageMemoryKey: pageMemoryKey,
+    updateSitePrefs: updateSitePrefs,
+    readSitePrefs: readSitePrefs,
     accentColor: accentColor,
   };
 })(typeof globalThis !== "undefined" ? globalThis : this);

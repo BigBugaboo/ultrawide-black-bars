@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Eemaldab 16:9 video külgmised mustad ribad ultrawide ekraanidel."
+  },
+  "commandCycle": {
+    "message": "Vaheta originaali, ümbruse, täite ja venituse vahel"
+  }
+}

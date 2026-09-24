@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Buang bar hitam tepi video 16:9 pada skrin ultrawide."
+  },
+  "commandCycle": {
+    "message": "Kitar asal, suasana, isi dan regang"
+  }
+}

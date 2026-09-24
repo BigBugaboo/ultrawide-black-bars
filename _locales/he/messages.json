@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "מסיר פסים שחורים בצדדים של וידאו 16:9 במסכים רחבים במיוחד."
+  },
+  "commandCycle": {
+    "message": "מעבר בין מקורי, אווירה, מילוי ומתיחה"
+  }
+}

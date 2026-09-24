@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Уклања бочне црне траке код 16:9 видеа на ултрашироким екранима."
+  },
+  "commandCycle": {
+    "message": "Пребацивање изворног, окружења, попуне и растезања"
+  }
+}

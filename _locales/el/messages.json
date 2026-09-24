@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Αφαιρεί τις μαύρες πλευρικές μπάρες βίντεο 16:9 σε οθόνες ultrawide."
+  },
+  "commandCycle": {
+    "message": "Εναλλαγή αρχικής, περιβάλλοντος, γεμίσματος και τεντώματος"
+  }
+}

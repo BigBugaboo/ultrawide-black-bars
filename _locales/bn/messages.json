@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "আলট্রাওয়াইড পর্দায় 16:9 ভিডিওর পাশের কালো দণ্ড সরায়।"
+  },
+  "commandCycle": {
+    "message": "মূল, পরিবেশ, ভরাট ও টানের মধ্যে বদলান"
+  }
+}

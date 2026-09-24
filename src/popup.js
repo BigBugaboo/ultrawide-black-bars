@@ -1,8 +1,17 @@
 var locale = "en";
 var mode = "ambient";
+var ambientBlur = "medium";
+var musicStyle = "bars";
+var hiddenModes = [];
 
 var tagline = document.querySelector("#tagline");
-var modeButtons = document.querySelectorAll("#modes button");
+var modeButtons = document.querySelectorAll("#modes > button[data-mode]");
+var blurGroup = document.querySelector("#blur-group");
+var blurLabel = document.querySelector("#blur-label");
+var blurButtons = document.querySelectorAll("#blur-group button");
+var musicStyleGroup = document.querySelector("#music-style-group");
+var musicStyleLabel = document.querySelector("#music-style-label");
+var musicStyleButtons = document.querySelectorAll("#music-style-group button");
 var langToggle = document.querySelector("#lang-toggle");
 var langMenu = document.querySelector("#lang-menu");
 var langOptions = document.querySelectorAll("#lang-menu button");
@@ -21,9 +30,27 @@ function render() {
   if (langToggle) langToggle.textContent = UbbI18n.localeName ? UbbI18n.localeName(locale) : locale;
   modeButtons.forEach(function (button) {
     var name = button.dataset.mode;
-    var key = name === "original" ? "modeOriginal" : name === "crop" ? "modeCrop" : "modeAmbient";
+    var key = name === "original" ? "modeOriginal" : name === "crop" ? "modeCrop" : name === "music" ? "modeMusic" : "modeAmbient";
+    var label = String(t(key) || "").trim();
+    button.textContent = label;
+    button.hidden = !label || hiddenModes.indexOf(name) >= 0;
+    button.classList.toggle("active", !button.hidden && name === mode);
+  });
+  if (blurGroup) blurGroup.hidden = mode !== "ambient";
+  if (blurLabel) blurLabel.textContent = t("blur");
+  blurButtons.forEach(function (button) {
+    var name = button.dataset.blur;
+    var key = name === "soft" ? "blurSoft" : name === "strong" ? "blurStrong" : "blurMedium";
     button.textContent = t(key);
-    button.classList.toggle("active", name === mode);
+    button.classList.toggle("active", name === ambientBlur);
+  });
+  if (musicStyleGroup) musicStyleGroup.hidden = mode !== "music";
+  if (musicStyleLabel) musicStyleLabel.textContent = t("musicStyle");
+  musicStyleButtons.forEach(function (button) {
+    var name = button.dataset.musicStyle;
+    var key = name === "drops" ? "musicDrops" : name === "breath" ? "musicBreath" : "musicBars";
+    button.textContent = t(key);
+    button.classList.toggle("active", name === musicStyle);
   });
   if (langSearch) {
     langSearch.placeholder = t("searchLanguages");
@@ -128,12 +155,31 @@ modeButtons.forEach(function (button) {
   });
 });
 
+blurButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    ambientBlur = button.dataset.blur;
+    persist({ ambientBlur: ambientBlur });
+    render();
+  });
+});
+
+musicStyleButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    musicStyle = button.dataset.musicStyle;
+    persist({ musicStyle: musicStyle });
+    render();
+  });
+});
+
 bindOpenSettings(openSettings);
 
 chrome.storage.local.get(null, function (items) {
   var settings = UbbSettings.normalizeSettings(items);
   locale = settings.locale;
   mode = settings.mode;
+  ambientBlur = settings.ambientBlur;
+  musicStyle = settings.musicStyle;
+  hiddenModes = settings.hiddenModes || [];
   if (settings.dropEnabled) {
     persist({ mode: "original" });
     chrome.storage.local.remove("enabled");

@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "在超寬螢幕上去掉 16:9 網頁影片兩側的黑邊。"
+    "message": "在超寬螢幕上為 16:9 影片去掉兩側黑邊。"
   },
   "commandCycle": {
-    "message": "在原比例、環境光和鋪滿之間切換"
+    "message": "在原比例、環境光、鋪滿和拉伸之間循環"
   }
 }

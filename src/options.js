@@ -1,10 +1,14 @@
 var locale = "en";
 var mode = "ambient";
 var ambientBlur = "medium";
+var musicStyle = "bars";
 var panel = "mode";
 var theme = "dark";
 var themeLightStart = "07:00";
 var themeLightEnd = "19:00";
+var accent = "cyan";
+var reducedMotion = false;
+var sharpen = false;
 
 var settingsTitle = document.querySelector("#settings-title");
 var nav = document.querySelector("#settings-nav");
@@ -14,6 +18,9 @@ var modeButtons = document.querySelectorAll("#modes > button[data-mode]");
 var blurGroup = document.querySelector("#blur-group");
 var blurLabel = document.querySelector("#blur-label");
 var blurButtons = document.querySelectorAll("#blur button");
+var musicStyleGroup = document.querySelector("#music-style-group");
+var musicStyleLabel = document.querySelector("#music-style-label");
+var musicStyleButtons = document.querySelectorAll("#music-styles button");
 var languageButtons = document.querySelectorAll("#languages button");
 var languageSearch = document.querySelector("#language-search");
 var languageEmpty = document.querySelector("#language-empty");
@@ -59,7 +66,43 @@ function panelKey(name) {
 function themeKey(name) {
   if (name === "light") return "themeLight";
   if (name === "auto") return "themeAuto";
+  if (name === "system") return "themeSystem";
   return "themeDark";
+}
+
+function modeKey(name) {
+  if (name === "original") return "modeOriginal";
+  if (name === "crop") return "modeCrop";
+  if (name === "music") return "modeMusic";
+  return "modeAmbient";
+}
+
+function applyPanelVisibility(sections, panelId) {
+  sections.forEach(function (section) {
+    section.hidden = section.dataset.panel !== panelId;
+  });
+}
+
+function shortcutErrorText() {
+  if (!shortcutErrorCode) return "";
+  var key = "shortcutErrorFailed";
+  if (shortcutErrorCode === "modifier") key = "shortcutErrorModifier";
+  else if (shortcutErrorCode === "ctrl-alt") key = "shortcutErrorCtrlAlt";
+  else if (shortcutErrorCode === "key" || shortcutErrorCode === "empty") key = "shortcutErrorKey";
+  else if (shortcutErrorCode === "reserved") key = "shortcutErrorReserved";
+  var text = t(key);
+  if (shortcutErrorDetail) text += " " + shortcutErrorDetail;
+  return text;
+}
+
+function labeledModeNames(names, translate) {
+  var out = [];
+  for (var i = 0; i < names.length; i++) {
+    var label = String(translate(modeKey(names[i])) || "").trim();
+    if (!label) continue;
+    out.push({ name: names[i], label: label });
+  }
+  return out;
 }
 
 function render() {
@@ -75,16 +118,23 @@ function render() {
     if (selected) button.setAttribute("aria-current", "true");
     else button.removeAttribute("aria-current");
   });
-  panels.forEach(function (section) {
-    section.hidden = section.dataset.panel !== panel;
-  });
+  applyPanelVisibility(panels, panel);
   modeButtons.forEach(function (button) {
     var name = button.dataset.mode;
-    var key = name === "original" ? "modeOriginal" : name === "crop" ? "modeCrop" : "modeAmbient";
-    button.textContent = t(key);
-    button.classList.toggle("active", name === mode);
+    var label = String(t(modeKey(name)) || "").trim();
+    button.textContent = label;
+    button.hidden = !label;
+    button.classList.toggle("active", !!label && name === mode);
   });
   blurGroup.hidden = mode !== "ambient";
+  if (musicStyleGroup) musicStyleGroup.hidden = mode !== "music";
+  if (musicStyleLabel) musicStyleLabel.textContent = t("musicStyle");
+  musicStyleButtons.forEach(function (button) {
+    var name = button.dataset.musicStyle;
+    var key = name === "drops" ? "musicDrops" : name === "breath" ? "musicBreath" : "musicBars";
+    button.textContent = t(key);
+    button.classList.toggle("active", name === musicStyle);
+  });
   blurLabel.textContent = t("blur");
   blurButtons.forEach(function (button) {
     var name = button.dataset.blur;
@@ -133,6 +183,38 @@ function render() {
     button.classList.toggle("active", button.dataset.theme === theme);
   });
   if (aboutFuture) aboutFuture.textContent = t("aboutFutureBody");
+  var accentLabel = document.querySelector("#accent-label");
+  if (accentLabel) accentLabel.textContent = t("accent");
+  var accentsBox = document.querySelector("#accents");
+  if (accentsBox && !accentsBox.childElementCount && UbbSettings.ACCENTS) {
+    UbbSettings.ACCENTS.forEach(function (item) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.dataset.accent = item.id;
+      button.style.setProperty("--swatch", item.color);
+      button.addEventListener("click", function () {
+        accent = item.id;
+        persist({ accent: accent });
+        render();
+      });
+      accentsBox.appendChild(button);
+    });
+  }
+  if (accentsBox) {
+    accentsBox.querySelectorAll("button").forEach(function (button) {
+      button.classList.toggle("active", button.dataset.accent === accent);
+    });
+  }
+  var motionBox = document.querySelector("#reduced-motion");
+  var motionLabel = document.querySelector("#reduced-motion-label");
+  if (motionBox) motionBox.checked = reducedMotion;
+  if (motionLabel) motionLabel.textContent = t("reducedMotion");
+  var sharpenBox = document.querySelector("#sharpen");
+  var sharpenLabel = document.querySelector("#sharpen-label");
+  var sharpenHint = document.querySelector("#sharpen-hint");
+  if (sharpenBox) sharpenBox.checked = sharpen;
+  if (sharpenLabel) sharpenLabel.textContent = t("sharpen");
+  if (sharpenHint) sharpenHint.textContent = t("sharpenHint");
   themeTimes.hidden = theme !== "auto";
   lightStartLabel.textContent = t("themeLightStart");
   lightEndLabel.textContent = t("themeLightEnd");
@@ -180,6 +262,14 @@ blurButtons.forEach(function (button) {
   });
 });
 
+musicStyleButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    musicStyle = button.dataset.musicStyle;
+    persist({ musicStyle: musicStyle });
+    render();
+  });
+});
+
 languageButtons.forEach(function (button) {
   button.addEventListener("click", function () {
     locale = UbbI18n.resolveLocale(button.dataset.locale);
@@ -187,6 +277,23 @@ languageButtons.forEach(function (button) {
     render();
   });
 });
+
+var reducedMotionInput = document.querySelector("#reduced-motion");
+if (reducedMotionInput) {
+  reducedMotionInput.addEventListener("change", function () {
+    reducedMotion = reducedMotionInput.checked;
+    persist({ reducedMotion: reducedMotion });
+    render();
+  });
+}
+var sharpenInput = document.querySelector("#sharpen");
+if (sharpenInput) {
+  sharpenInput.addEventListener("change", function () {
+    sharpen = sharpenInput.checked;
+    persist({ sharpen: sharpen });
+    render();
+  });
+}
 
 if (languageSearch) {
   languageSearch.addEventListener("input", function () {
@@ -217,18 +324,6 @@ function onClock(input, key) {
 
 onClock(lightStartInput, "themeLightStart");
 onClock(lightEndInput, "themeLightEnd");
-
-function shortcutErrorText() {
-  if (!shortcutErrorCode) return "";
-  var key = "shortcutErrorFailed";
-  if (shortcutErrorCode === "modifier") key = "shortcutErrorModifier";
-  else if (shortcutErrorCode === "ctrl-alt") key = "shortcutErrorCtrlAlt";
-  else if (shortcutErrorCode === "key" || shortcutErrorCode === "empty") key = "shortcutErrorKey";
-  else if (shortcutErrorCode === "reserved") key = "shortcutErrorReserved";
-  var text = t(key);
-  if (shortcutErrorDetail) text += " " + shortcutErrorDetail;
-  return text;
-}
 
 function applyShortcutResult(result, clearPending) {
   if (!result.ok) {
@@ -309,9 +404,13 @@ chrome.storage.local.get(null, function (items) {
   locale = settings.locale;
   mode = settings.mode;
   ambientBlur = settings.ambientBlur;
+  musicStyle = settings.musicStyle;
   theme = settings.theme;
   themeLightStart = settings.themeLightStart;
   themeLightEnd = settings.themeLightEnd;
+  accent = settings.accent || "cyan";
+  reducedMotion = !!settings.reducedMotion;
+  sharpen = !!settings.sharpen;
   if (settings.dropEnabled) {
     persist({ mode: "original" });
     chrome.storage.local.remove("enabled");
@@ -324,3 +423,10 @@ chrome.storage.local.get(null, function (items) {
     });
   }
 });
+
+if (typeof globalThis !== "undefined") {
+  globalThis.UbbOptions = {
+    applyPanelVisibility: applyPanelVisibility,
+    labeledModeNames: labeledModeNames,
+  };
+}

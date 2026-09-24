@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "เอาแถบดำด้านข้างของวิดีโอ 16:9 ออกบนจอ ultrawide"
+  },
+  "commandCycle": {
+    "message": "สลับต้นฉบับ แสงโดยรอบ เติม และยืด"
+  }
+}

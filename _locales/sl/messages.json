@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Odstrani stranske črne pasove videa 16:9 na ultrawide zaslonih."
+  },
+  "commandCycle": {
+    "message": "Preklapljaj izvirno, okolico, zapolnitev in razteg"
+  }
+}

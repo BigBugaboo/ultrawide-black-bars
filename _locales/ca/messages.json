@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Treu les barres negres laterals del vídeo 16:9 en pantalles ultrawide."
+  },
+  "commandCycle": {
+    "message": "Alterna original, ambient, omple i estira"
+  }
+}

@@ -165,10 +165,87 @@
         return video ? [video] : [];
       },
     },
+    netflix: {
+      id: "netflix",
+      match: function (loc) {
+        var host = hostOf(loc);
+        if (host !== "www.netflix.com" && host !== "netflix.com") return false;
+        return /^\/watch\//.test(pathOf(loc));
+      },
+      findArea: function (doc) {
+        return doc.querySelector("[data-uia='watch-video-player-view']");
+      },
+      findVideo: function (area) {
+        return area ? area.querySelector("video") : null;
+      },
+      scaleTargets: function (area) {
+        if (!area) return [];
+        var video = area.querySelector("video");
+        return video ? [video] : [];
+      },
+    },
+    prime: {
+      id: "prime",
+      match: function (loc) {
+        var host = hostOf(loc);
+        if (host !== "www.primevideo.com" && host !== "primevideo.com") return false;
+        return /^\/(gp\/video\/detail|detail|region\/[^/]+\/detail|region\/[^/]+\/gp\/video\/detail)\//.test(pathOf(loc));
+      },
+      findArea: function (doc) {
+        return doc.querySelector(".atvwebplayersdk-video-player, .webPlayerSDKContainer");
+      },
+      findVideo: function (area) {
+        return area ? area.querySelector("video") : null;
+      },
+      scaleTargets: function (area) {
+        if (!area) return [];
+        var video = area.querySelector("video");
+        return video ? [video] : [];
+      },
+    },
+    disney: {
+      id: "disney",
+      match: function (loc) {
+        var host = hostOf(loc);
+        if (host !== "www.disneyplus.com" && host !== "disneyplus.com") return false;
+        var path = pathOf(loc);
+        return path.indexOf("/play/") === 0 || path.indexOf("/video/") === 0;
+      },
+      findArea: function (doc) {
+        return doc.querySelector(".btm-media-player, .btm-media-client-element");
+      },
+      findVideo: function (area) {
+        return area ? area.querySelector("video") : null;
+      },
+      scaleTargets: function (area) {
+        if (!area) return [];
+        var video = area.querySelector("video");
+        return video ? [video] : [];
+      },
+    },
+    max: {
+      id: "max",
+      match: function (loc) {
+        var host = hostOf(loc);
+        if (host !== "play.max.com") return false;
+        return /^\/video\/watch\//.test(pathOf(loc));
+      },
+      findArea: function (doc) {
+        return doc.querySelector("[data-testid='player-container'], .bt-player");
+      },
+      findVideo: function (area) {
+        return area ? area.querySelector("video") : null;
+      },
+      scaleTargets: function (area) {
+        if (!area) return [];
+        var video = area.querySelector("video");
+        return video ? [video] : [];
+      },
+    },
   };
 
   function current(loc) {
-    var order = ["bilibili", "youtube", "twitch"];
+    var order = ["bilibili", "youtube", "twitch", "netflix", "prime", "disney", "max"];
     for (var i = 0; i < order.length; i++) {
       if (sites[order[i]].match(loc)) return sites[order[i]];
     }

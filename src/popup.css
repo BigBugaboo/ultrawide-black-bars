@@ -308,20 +308,27 @@ body.welcome.settings .settings-panels {
   flex: 1;
   min-width: 0;
   min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 body.welcome.settings .settings-panel {
-  flex: 1;
+  flex: 1 1 auto;
+  align-self: stretch;
   min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
 }
 
+body.welcome.settings .settings-panel[hidden] {
+  display: none !important;
+}
+
 body.welcome.settings #panel-language {
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
@@ -331,20 +338,19 @@ body.welcome.settings .language-filter {
 }
 
 body.welcome.settings #languages {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  height: auto;
   overflow: auto;
-  align-content: start;
-}
-
-body.welcome.settings #languages {
-  max-height: min(360px, calc(100vh - 280px));
   overflow-y: auto;
   overscroll-behavior: contain;
   align-content: start;
 }
 
-body.welcome.settings #blur-group {
+body.welcome.settings #blur-group,
+body.welcome.settings #music-style-group,
+#blur-group,
+#music-style-group {
   margin-left: 14px;
 }
 
@@ -374,6 +380,11 @@ label.check {
   font-size: 13px;
 }
 
+label.check[hidden],
+button[hidden] {
+  display: none !important;
+}
+
 html[data-motion="reduce"] *,
 html[data-motion="reduce"] *::before,
 html[data-motion="reduce"] *::after {
@@ -398,7 +409,8 @@ html[dir="rtl"] .modes button {
   text-align: right;
 }
 
-body.welcome.settings #blur-group .field-label {
+body.welcome.settings #blur-group .field-label,
+body.welcome.settings #music-style-group .field-label {
   margin-top: 0;
 }
 

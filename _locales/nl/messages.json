@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Haalt de zijdelingse zwarte balken weg bij 16:9-video op ultrawide schermen."
+  },
+  "commandCycle": {
+    "message": "Wissel tussen origineel, sfeer, vullen en uitrekken"
+  }
+}

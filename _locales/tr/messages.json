@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "Ultrawide ekranlarda 16:9 videoların iki yanındaki siyah çubukları kaldırır."
+    "message": "Ultrawide ekranlarda 16:9 videonun yanındaki siyah çubukları kaldırır."
   },
   "commandCycle": {
-    "message": "Orijinal, ortam ve doldur arasında geçiş yap"
+    "message": "Orijinal, ortam, doldur ve ger arasında dön"
   }
 }

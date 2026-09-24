@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Elimină barele negre laterale ale video 16:9 pe ecrane ultrawide."
+  },
+  "commandCycle": {
+    "message": "Comută între original, ambient, umplere și întindere"
+  }
+}

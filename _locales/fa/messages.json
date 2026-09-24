@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "نوارهای سیاه دو طرف ویدیوی 16:9 را در نمایشگرهای خیلی‌عریض برمی‌دارد."
+  },
+  "commandCycle": {
+    "message": "چرخش بین اصلی، نور محیط، پر کردن و کشیدن"
+  }
+}

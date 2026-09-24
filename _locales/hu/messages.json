@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Eltávolítja a 16:9 videó oldalsó fekete sávjait ultrawide képernyőn."
+  },
+  "commandCycle": {
+    "message": "Váltás eredeti, környezet, kitöltés és nyújtás között"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Noņem 16:9 video sānu melnās joslas ultrawide ekrānos."
+  },
+  "commandCycle": {
+    "message": "Pārslēgt oriģinālu, vidi, aizpildi un izstiepšanu"
+  }
+}

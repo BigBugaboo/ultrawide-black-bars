@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Poistaa 16:9-videon sivujen mustat palkit ultrawide-näytöillä."
+  },
+  "commandCycle": {
+    "message": "Vaihda alkuperäisen, ympäristön, täytön ja venytyksen välillä"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Fjerner de svarte sidefeltene på 16:9-video på ultrawide-skjermer."
+  },
+  "commandCycle": {
+    "message": "Bytt mellom original, stemning, fyll og strekk"
+  }
+}

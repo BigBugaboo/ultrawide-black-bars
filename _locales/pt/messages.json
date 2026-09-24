@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "Remove as barras pretas laterais de vídeos 16:9 em telas ultrawide."
+    "message": "Remove as barras pretas laterais de vídeo 16:9 em ecrãs ultrawide."
   },
   "commandCycle": {
-    "message": "Alternar entre original, ambiente e preencher"
+    "message": "Alternar original, ambiente, preencher e esticar"
   }
 }

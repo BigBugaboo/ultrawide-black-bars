@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Маха страничните черни ленти при 16:9 видео на ултрашироки екрани."
+  },
+  "commandCycle": {
+    "message": "Превключване между оригинал, среда, запълване и разтягане"
+  }
+}

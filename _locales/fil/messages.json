@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Tinatanggal ang itim na bar sa gilid ng 16:9 na video sa ultrawide na screen."
+  },
+  "commandCycle": {
+    "message": "Ikutin ang orihinal, paligid, punuin, at iunat"
+  }
+}

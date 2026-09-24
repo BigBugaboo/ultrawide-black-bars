@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Fjerner de sorte sidebjælker ved 16:9-video på ultrawide-skærme."
+  },
+  "commandCycle": {
+    "message": "Skift mellem original, omgivelse, udfyld og stræk"
+  }
+}

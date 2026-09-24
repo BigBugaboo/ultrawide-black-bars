@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "在带鱼屏上去掉 16:9 网页视频两侧的黑边。"
+    "message": "在带鱼屏上为 16:9 视频去掉两侧黑边。"
   },
   "commandCycle": {
-    "message": "在原比例、环境光和铺满之间切换"
+    "message": "在原比例、环境光、铺满和拉伸之间循环"
   }
 }

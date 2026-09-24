@@ -6,6 +6,6 @@
     "message": "Quita las barras negras laterales del vídeo 16:9 en pantallas ultrawide."
   },
   "commandCycle": {
-    "message": "Alternar original, ambiente y relleno"
+    "message": "Alternar original, ambiente, relleno y estirar"
   }
 }

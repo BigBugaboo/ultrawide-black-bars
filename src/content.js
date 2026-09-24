@@ -7,6 +7,7 @@
   var mode = "ambient";
   var locale = "en";
   var ambientBlur = "medium";
+  var musicStyle = "bars";
   var hiddenModes = [];
   var sharpen = false;
   var reducedMotion = false;
@@ -69,17 +70,18 @@
   function applyStored(next) {
     locale = next.locale;
     ambientBlur = next.ambientBlur;
+    musicStyle = next.musicStyle || "bars";
     hiddenModes = next.hiddenModes || [];
     sharpen = !!next.sharpen;
     reducedMotion = !!next.reducedMotion;
-    siteMemory = next.siteMemory || {};
+    siteMemory = next.sitePrefs || next.siteMemory || {};
     pageMemory = next.pageMemory || {};
     var sitePref = siteMemory[hostKey()];
     var pagePref = pageMemory[pageKey()];
-    mode = sitePref && sitePref.mode ? sitePref.mode : next.mode;
+    mode = sitePref && sitePref.mode ? settingsApi.normalizeSettings({ mode: sitePref.mode }).mode : next.mode;
     if (hiddenModes.indexOf(mode) >= 0) mode = layout.nextMode(mode, hiddenModes);
     var zoomSrc = pagePref || sitePref || {};
-    zoom = settingsApi.normalizeZoom(zoomSrc.zoom);
+    zoom = settingsApi.normalizeZoom(zoomSrc.userScale != null ? zoomSrc.userScale : zoomSrc.zoom);
     panX = settingsApi.normalizePan(zoomSrc.panX);
     panY = settingsApi.normalizePan(zoomSrc.panY);
     if (next.dropEnabled) {
@@ -115,12 +117,12 @@
   function flushSave(snapshot) {
     var storage = globalThis.chrome && chrome.storage && chrome.storage.local;
     if (!storage || !snapshot.host) return;
-    storage.get(["siteMemory", "pageMemory"], function (items) {
-      var sites = Object.assign({}, (items && items.siteMemory) || {});
+    storage.get(["sitePrefs", "pageMemory"], function (items) {
+      var sites = Object.assign({}, (items && items.sitePrefs) || {});
       var pages = Object.assign({}, (items && items.pageMemory) || {});
       sites[snapshot.host] = Object.assign({}, sites[snapshot.host] || {}, {
         mode: snapshot.mode,
-        zoom: snapshot.zoom,
+        userScale: snapshot.zoom,
         panX: snapshot.panX,
         panY: snapshot.panY,
       });
@@ -129,7 +131,7 @@
       trimMemory(pages, 40);
       siteMemory = sites;
       pageMemory = pages;
-      storage.set({ siteMemory: sites, pageMemory: pages });
+      storage.set({ sitePrefs: sites, pageMemory: pages });
     });
   }
 
@@ -203,7 +205,7 @@
 
   function clearEffects() {
     if (!area) return;
-    area.classList.remove("ubb-crop", "ubb-ambient", "ubb-stretch", "ubb-zoom");
+    area.classList.remove("ubb-crop", "ubb-ambient", "ubb-music", "ubb-zoom");
     area.style.removeProperty("--ubb-scale");
     area.style.removeProperty("--ubb-scale-x");
     area.style.removeProperty("--ubb-scale-y");
@@ -216,7 +218,7 @@
 
   function releaseArea(prev) {
     if (!prev) return;
-    prev.classList.remove("ubb-player", "ubb-generic", "ubb-crop", "ubb-ambient", "ubb-stretch", "ubb-zoom");
+    prev.classList.remove("ubb-player", "ubb-generic", "ubb-crop", "ubb-ambient", "ubb-music", "ubb-zoom");
     if (prev.dataset.ubbStatic === "1") {
       prev.style.position = "";
       delete prev.dataset.ubbStatic;
@@ -287,7 +289,7 @@
         }
         rows[y] = row;
       }
-      value = { pending: false, failed: false, bars: layout.detectBlackBars(rows) };
+      value = { pending: false, failed: false, bars: layout.detectBlackBars(data, SAMPLE_W, SAMPLE_H) };
     } catch (err) {
       value = { pending: false, failed: true, bars: null };
     }
@@ -304,7 +306,7 @@
     }
     ensureNodes();
     area.classList.add("ubb-player", "ubb-ambient");
-    area.classList.remove("ubb-crop", "ubb-stretch", "ubb-zoom");
+    area.classList.remove("ubb-crop", "ubb-music", "ubb-zoom");
     area.style.removeProperty("--ubb-scale");
     area.style.setProperty("--ubb-blur", settingsApi.blurRadius(ambientBlur) + "px");
     clearScaleTargets();
@@ -326,6 +328,319 @@
       fillCanvas(topCanvas);
       fillCanvas(bottomCanvas);
     }
+  }
+
+  var musicAudio = null;
+  var musicFor = null;
+  var musicLeft = [];
+  var musicRight = [];
+  var dropLeft = [];
+  var dropRight = [];
+  var lastDropLeft = 0;
+  var lastDropRight = 0;
+  var breathLeft = null;
+  var breathRight = null;
+  var BREATH_HUES = [52, 78, 28, 18, 330, 300, 145];
+
+  function resumeMusic() {
+    if (!musicAudio || !musicAudio.ctx) return;
+    if (musicAudio.ctx.state === "suspended") {
+      musicAudio.ctx.resume().catch(function () {});
+    }
+  }
+
+  function attachMusic(videoEl) {
+    if (musicFor === videoEl && musicAudio) return musicAudio;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) {
+      musicFor = videoEl;
+      musicAudio = { ok: false };
+      return musicAudio;
+    }
+    try {
+      var ctx = new AC();
+      var source = ctx.createMediaElementSource(videoEl);
+      var splitter = ctx.createChannelSplitter(2);
+      var left = ctx.createAnalyser();
+      var right = ctx.createAnalyser();
+      left.fftSize = 256;
+      right.fftSize = 256;
+      left.smoothingTimeConstant = 0.12;
+      right.smoothingTimeConstant = 0.12;
+      source.connect(splitter);
+      splitter.connect(left, 0);
+      splitter.connect(right, 1);
+      source.connect(ctx.destination);
+      musicFor = videoEl;
+      musicAudio = { ok: true, ctx: ctx, left: left, right: right };
+      resumeMusic();
+      return musicAudio;
+    } catch (err) {
+      musicFor = videoEl;
+      musicAudio = { ok: false };
+      return musicAudio;
+    }
+  }
+
+  function readBands(analyser) {
+    if (!analyser) return layout.musicBands(null, 8);
+    var data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+    return layout.musicBands(data, 8);
+  }
+
+  function readEnergy(analyser) {
+    if (!analyser) return 0;
+    var data = new Uint8Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(data);
+    var sum = 0;
+    for (var i = 0; i < data.length; i++) {
+      var v = (data[i] - 128) / 128;
+      sum += v * v;
+    }
+    var rms = Math.sqrt(sum / data.length);
+    var energy = (rms - 0.015) / 0.12;
+    if (energy < 0) energy = 0;
+    if (energy > 1) energy = 1;
+    return energy;
+  }
+
+  function followBands(prev, next) {
+    var out = [];
+    for (var i = 0; i < next.length; i++) {
+      var from = prev[i] || 0;
+      out.push(from + (next[i] - from) * 0.42);
+    }
+    return out;
+  }
+
+  function roundBar(ctx, x, y, w, h, r) {
+    var radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
+    ctx.closePath();
+  }
+
+  function drawChannel(canvas, levels, width, height, reverse) {
+    var w = width > 4 ? width : canvas.clientWidth || 48;
+    var h = height > 4 ? height : canvas.clientHeight || 180;
+    if (w < 4 || h < 4) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var pw = Math.max(1, Math.floor(w * dpr));
+    var ph = Math.max(1, Math.floor(h * dpr));
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw;
+      canvas.height = ph;
+    }
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var n = levels && levels.length ? levels.length : 8;
+    var colW = w / n;
+    for (var i = 0; i < n; i++) {
+      var index = reverse ? n - 1 - i : i;
+      var amp = levels && levels[index] ? levels[index] : 0;
+      var lit = Math.max(h * 0.06, Math.min(h * 0.96, amp * h * 0.92));
+      var x = i * colW;
+      var y = h - lit;
+      var glow = ctx.createLinearGradient(0, h, 0, y);
+      glow.addColorStop(0, "rgba(255, 214, 10, 0.9)");
+      glow.addColorStop(0.45, "rgba(255, 186, 0, 0.55)");
+      glow.addColorStop(1, "rgba(255, 170, 0, 0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(x, y, colW + 0.5, lit);
+    }
+  }
+
+  function channelEnergy(levels) {
+    if (!levels || !levels.length) return 0;
+    var sum = 0;
+    for (var i = 0; i < levels.length; i++) sum += levels[i] || 0;
+    return sum / levels.length;
+  }
+
+  function sizeCanvas(canvas, width, height) {
+    var w = width > 4 ? width : canvas.clientWidth || 48;
+    var h = height > 4 ? height : canvas.clientHeight || 180;
+    if (w < 4 || h < 4) return null;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var pw = Math.max(1, Math.floor(w * dpr));
+    var ph = Math.max(1, Math.floor(h * dpr));
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw;
+      canvas.height = ph;
+    }
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { ctx: ctx, w: w, h: h };
+  }
+
+  function spawnDrops(list, energy, previous) {
+    var now = Date.now();
+    var hit = energy > 0.2 && energy > previous + 0.12;
+    if (hit && list.length < 4) {
+      var count = 1;
+      for (var i = 0; i < count; i++) {
+        list.push({
+          x: 0.12 + Math.random() * 0.76,
+          y: 0.08 + Math.random() * 0.84,
+          born: now,
+          hue: Math.floor(Math.random() * 360),
+        });
+      }
+    }
+    var kept = [];
+    for (var j = 0; j < list.length; j++) {
+      if (now - list[j].born < 1100) kept.push(list[j]);
+    }
+    return kept;
+  }
+
+  function drawDrops(canvas, list, width, height) {
+    var box = sizeCanvas(canvas, width, height);
+    if (!box) return;
+    var now = Date.now();
+    for (var i = 0; i < list.length; i++) {
+      var drop = list[i];
+      var age = (now - drop.born) / 1100;
+      if (age < 0 || age > 1) continue;
+      var radius = 6 + age * Math.min(box.w, box.h) * 0.7;
+      box.ctx.beginPath();
+      box.ctx.arc(drop.x * box.w, drop.y * box.h, radius, 0, Math.PI * 2);
+      box.ctx.fillStyle = "hsla(" + drop.hue + ", 90%, 60%, " + (1 - age) * 0.45 + ")";
+      box.ctx.fill();
+    }
+  }
+
+  function makeWash() {
+    var blobs = [];
+    for (var i = 0; i < 4; i++) {
+      blobs.push({
+        x: Math.random(),
+        y: Math.random(),
+        hue: BREATH_HUES[i % BREATH_HUES.length],
+        tx: Math.random(),
+        ty: Math.random(),
+        thue: BREATH_HUES[i % BREATH_HUES.length],
+        next: 0,
+      });
+    }
+    return { blobs: blobs, last: 0 };
+  }
+
+  function pitchOf(levels) {
+    if (!levels || !levels.length) return 0.2;
+    var weight = 0;
+    var sum = 0;
+    for (var i = 0; i < levels.length; i++) {
+      var v = levels[i] || 0;
+      weight += v;
+      sum += v * (i + 0.5);
+    }
+    if (weight < 0.04) return 0.2;
+    return sum / weight / levels.length;
+  }
+
+  function hueFromPitch(pitch) {
+    var t = (pitch - 0.15) / 0.38;
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
+    return 255 + (12 - 255) * t;
+  }
+
+  function stepWash(wash, energy) {
+    var now = Date.now();
+    var dt = wash.last ? Math.min(0.08, (now - wash.last) / 1000) : 0.016;
+    wash.last = now;
+    var speed = 0.35 + energy * 3.4;
+    var interval = energy > 0.55 ? 260 : energy > 0.22 ? 720 : 1900;
+    for (var i = 0; i < wash.blobs.length; i++) {
+      var blob = wash.blobs[i];
+      if (now >= blob.next) {
+        blob.tx = Math.random();
+        blob.ty = Math.random();
+        blob.thue = BREATH_HUES[Math.floor(Math.random() * BREATH_HUES.length)] + (Math.random() * 20 - 10);
+        blob.next = now + interval * (0.55 + Math.random());
+      }
+      var k = Math.min(1, dt * speed);
+      blob.x += (blob.tx - blob.x) * k;
+      blob.y += (blob.ty - blob.y) * k;
+      var dh = blob.thue - blob.hue;
+      if (dh > 180) dh -= 360;
+      if (dh < -180) dh += 360;
+      blob.hue += dh * k;
+    }
+  }
+
+  function drawBreath(canvas, wash, levels, energy, width, height) {
+    var box = sizeCanvas(canvas, width, height);
+    if (!box || !wash) return;
+    stepWash(wash, energy);
+    var base = wash.blobs[0];
+    box.ctx.fillStyle = "hsl(" + base.hue + ", 92%, 54%)";
+    box.ctx.fillRect(0, 0, box.w, box.h);
+    for (var i = 0; i < wash.blobs.length; i++) {
+      var blob = wash.blobs[i];
+      var cx = blob.x * box.w;
+      var cy = blob.y * box.h;
+      var radius = Math.max(box.w, box.h) * (0.85 + energy * 0.45);
+      var grad = box.ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      grad.addColorStop(0, "hsla(" + blob.hue + ", 96%, 64%, 0.92)");
+      grad.addColorStop(0.42, "hsla(" + (blob.hue + 16) + ", 92%, 56%, 0.5)");
+      grad.addColorStop(1, "hsla(" + blob.hue + ", 88%, 50%, 0)");
+      box.ctx.fillStyle = grad;
+      box.ctx.fillRect(0, 0, box.w, box.h);
+    }
+  }
+
+  function paintMusicFrame() {
+    if (mode !== "music" || !video || !area || video.readyState < 2) return;
+    var rect = rectOf(video);
+    if (!rect || (!rect.sideBars && !rect.letterBars)) {
+      clearEffects();
+      return;
+    }
+    ensureNodes();
+    area.classList.add("ubb-player", "ubb-music");
+    area.classList.remove("ubb-crop", "ubb-ambient", "ubb-zoom");
+    area.style.removeProperty("--ubb-scale");
+    area.style.removeProperty("--ubb-blur");
+    clearScaleTargets();
+    placeBars(rect);
+    var sideH = video.clientHeight || rect.boxH || rect.height;
+    var leftW = Math.max(rect.x || 0, 8);
+    var rightW = Math.max((rect.boxW || video.clientWidth || 0) - (rect.x || 0) - (rect.width || 0), 8);
+    var audio = attachMusic(video);
+    resumeMusic();
+    var left = audio && audio.ok ? readBands(audio.left) : layout.musicBands(null, 8);
+    var right = audio && audio.ok ? readBands(audio.right) : left;
+    musicLeft = followBands(musicLeft, left);
+    musicRight = followBands(musicRight, right);
+    if (musicStyle === "drops") {
+      var leftEnergy = audio && audio.ok ? readEnergy(audio.left) : channelEnergy(musicLeft);
+      var rightEnergy = audio && audio.ok ? readEnergy(audio.right) : leftEnergy;
+      dropLeft = spawnDrops(dropLeft, leftEnergy, lastDropLeft);
+      dropRight = spawnDrops(dropRight, rightEnergy, lastDropRight);
+      lastDropLeft = leftEnergy;
+      lastDropRight = rightEnergy;
+      drawDrops(leftCanvas, dropLeft, leftW, sideH);
+      drawDrops(rightCanvas, dropRight, rightW, sideH);
+      return;
+    }
+    if (musicStyle === "breath") {
+      if (!breathLeft) breathLeft = makeWash();
+      if (!breathRight) breathRight = makeWash();
+      drawBreath(leftCanvas, breathLeft, left, audio && audio.ok ? readEnergy(audio.left) : 0, leftW, sideH);
+      drawBreath(rightCanvas, breathRight, right, audio && audio.ok ? readEnergy(audio.right) : 0, rightW, sideH);
+      return;
+    }
+    drawChannel(leftCanvas, musicLeft, leftW, sideH, false);
+    drawChannel(rightCanvas, musicRight, rightW, sideH, true);
   }
 
   function loopState() {
@@ -363,7 +678,8 @@
       loopArmed = false;
       frameHandle = 0;
       if (token !== loopToken) return;
-      paintAmbientFrame();
+      if (mode === "music") paintMusicFrame();
+      else paintAmbientFrame();
       armAmbientLoop();
     }
     if (driver === "video-frame") {
@@ -377,9 +693,11 @@
     if (!layout.shouldRunAmbientLoop(loopState())) {
       stopAmbientLoop();
       if (mode === "ambient") paintAmbientFrame();
+      if (mode === "music") paintMusicFrame();
       return;
     }
-    paintAmbientFrame();
+    if (mode === "music") paintMusicFrame();
+    else paintAmbientFrame();
     armAmbientLoop();
   }
 
@@ -418,7 +736,7 @@
   function modeLabel(next) {
     if (next === "original") return i18n.translate(locale, "modeOriginal");
     if (next === "crop") return i18n.translate(locale, "modeCrop");
-    if (next === "stretch") return i18n.translate(locale, "modeStretch");
+    if (next === "music") return i18n.translate(locale, "modeMusic");
     return i18n.translate(locale, "modeAmbient");
   }
 
@@ -571,18 +889,17 @@
       applySharpen();
       return;
     }
-    if (plan.kind === "ambient") {
+    if (plan.kind === "ambient" || plan.kind === "music") {
       syncAmbient();
       applySharpen();
       return;
     }
     stopAmbientLoop();
-    area.classList.add("ubb-player", plan.kind === "stretch" ? "ubb-stretch" : plan.kind === "zoom" ? "ubb-zoom" : "ubb-crop");
-    area.classList.remove("ubb-ambient");
-    if (plan.kind !== "stretch") area.classList.remove("ubb-stretch");
+    area.classList.add("ubb-player", plan.kind === "zoom" ? "ubb-zoom" : "ubb-crop");
+    area.classList.remove("ubb-ambient", "ubb-music");
     if (plan.kind !== "zoom") area.classList.remove("ubb-zoom");
     if (plan.kind !== "crop") area.classList.remove("ubb-crop");
-    area.classList.add(plan.kind === "stretch" ? "ubb-stretch" : plan.kind === "zoom" ? "ubb-zoom" : "ubb-crop");
+    area.classList.add(plan.kind === "zoom" ? "ubb-zoom" : "ubb-crop");
     area.style.removeProperty("--ubb-blur");
     setTransform(plan.scales);
     markTargets();
@@ -596,7 +913,7 @@
     if (host) {
       siteMemory[host] = Object.assign({}, siteMemory[host] || {}, {
         mode: mode,
-        zoom: zoom,
+        userScale: zoom,
         panX: panX,
         panY: panY,
       });
@@ -644,18 +961,23 @@
   if (globalThis.chrome && chrome.storage && chrome.storage.onChanged) {
     chrome.storage.onChanged.addListener(function (changes, areaName) {
       if (areaName !== "local") return;
-      var watch = ["mode", "enabled", "locale", "ambientBlur", "siteMemory", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
+      var watch = ["mode", "enabled", "locale", "ambientBlur", "musicStyle", "sitePrefs", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
       var relevant = false;
       for (var i = 0; i < watch.length; i++) if (changes[watch[i]]) relevant = true;
       if (!relevant) return;
       storageGetAll().then(function (saved) {
         applyStored(saved);
-        apply();
+        if (changes.mode && changes.mode.newValue) setMode(changes.mode.newValue, false);
+        else apply();
       });
     });
   }
 
   setInterval(apply, 1000);
+
+  document.addEventListener("pointerdown", function () {
+    if (mode === "music") resumeMusic();
+  }, true);
 
   document.addEventListener("fullscreenchange", function () {
     setTimeout(apply, 50);

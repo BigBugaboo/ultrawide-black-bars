@@ -20,8 +20,11 @@ const tall = pictureRect(1920, 1080, 1920, 800);
 assert.equal(tall.sideBars, false);
 
 assert.equal(nextMode("original"), "ambient");
-assert.equal(nextMode("ambient"), "crop");
+assert.equal(nextMode("ambient"), "music");
+assert.equal(nextMode("music"), "crop");
 assert.equal(nextMode("crop"), "original");
+assert.equal(nextMode("ambient", ["crop"]), "music");
+assert.equal(nextMode("original", ["ambient", "crop"]), "music");
 assert.equal(pictureRect(0, 10, 10, 10), null);
 
 const { ambientSampleDriver, shouldRunAmbientLoop } = sandbox.UbbLayout;
@@ -29,6 +32,10 @@ assert.equal(ambientSampleDriver(true), "video-frame");
 assert.equal(ambientSampleDriver(false), "animation-frame");
 assert.equal(
   shouldRunAmbientLoop({ mode: "ambient", playing: true, sideBars: true }),
+  true
+);
+assert.equal(
+  shouldRunAmbientLoop({ mode: "music", playing: true, sideBars: true }),
   true
 );
 assert.equal(
@@ -113,5 +120,16 @@ assert.equal(sideFill.axis, "x");
 assert.equal(letterFill.axis, "y");
 assert.ok(sideFill.scale > 1);
 assert.ok(letterFill.scale > 1);
+
+const { visualPlan } = sandbox.UbbLayout;
+const ambientPlan = visualPlan({ rect: wide, mode: "ambient" });
+const fillPlan = visualPlan({ rect: wide, mode: "crop" });
+assert.equal(ambientPlan.kind, "ambient");
+assert.equal(fillPlan.kind, "crop");
+assert.equal(visualPlan({ rect: wide, mode: "music" }).kind, "music");
+const { musicBands } = sandbox.UbbLayout;
+assert.equal(musicBands(null, 4).join(","), "0,0,0,0");
+const loud = musicBands([255, 255, 0, 0], 2);
+assert.ok(loud[0] > loud[1]);
 
 console.log("layout tests passed");

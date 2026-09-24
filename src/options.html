@@ -30,6 +30,15 @@
                   <button type="button" data-blur="strong"></button>
                 </div>
               </div>
+              <button type="button" data-mode="music"></button>
+              <div id="music-style-group" hidden>
+                <p class="field-label" id="music-style-label"></p>
+                <div class="modes" id="music-styles">
+                  <button type="button" data-music-style="bars"></button>
+                  <button type="button" data-music-style="drops"></button>
+                  <button type="button" data-music-style="breath"></button>
+                </div>
+              </div>
               <button type="button" data-mode="crop"></button>
             </div>
           </section>
@@ -39,7 +48,7 @@
               <p id="language-empty" class="language-empty" hidden></p>
             </div>
             <div class="modes" id="languages">
-              <button type="button" data-locale="en">English</button>
+                            <button type="button" data-locale="en">English</button>
               <button type="button" data-locale="zh_CN">简体中文</button>
               <button type="button" data-locale="zh_TW">繁體中文</button>
               <button type="button" data-locale="ja">日本語</button>
@@ -48,12 +57,43 @@
               <button type="button" data-locale="fr">Français</button>
               <button type="button" data-locale="de">Deutsch</button>
               <button type="button" data-locale="pt">Português</button>
+              <button type="button" data-locale="pt_BR">Português (Brasil)</button>
               <button type="button" data-locale="ru">Русский</button>
               <button type="button" data-locale="it">Italiano</button>
               <button type="button" data-locale="tr">Türkçe</button>
               <button type="button" data-locale="vi">Tiếng Việt</button>
               <button type="button" data-locale="id">Bahasa Indonesia</button>
-            </div>
+              <button type="button" data-locale="th">ไทย</button>
+              <button type="button" data-locale="pl">Polski</button>
+              <button type="button" data-locale="nl">Nederlands</button>
+              <button type="button" data-locale="ar">العربية</button>
+              <button type="button" data-locale="hi">हिन्दी</button>
+              <button type="button" data-locale="uk">Українська</button>
+              <button type="button" data-locale="cs">Čeština</button>
+              <button type="button" data-locale="sv">Svenska</button>
+              <button type="button" data-locale="da">Dansk</button>
+              <button type="button" data-locale="fi">Suomi</button>
+              <button type="button" data-locale="no">Norsk</button>
+              <button type="button" data-locale="el">Ελληνικά</button>
+              <button type="button" data-locale="he">עברית</button>
+              <button type="button" data-locale="ro">Română</button>
+              <button type="button" data-locale="hu">Magyar</button>
+              <button type="button" data-locale="ms">Bahasa Melayu</button>
+              <button type="button" data-locale="fil">Filipino</button>
+              <button type="button" data-locale="bn">বাংলা</button>
+              <button type="button" data-locale="ca">Català</button>
+              <button type="button" data-locale="sk">Slovenčina</button>
+              <button type="button" data-locale="hr">Hrvatski</button>
+              <button type="button" data-locale="bg">Български</button>
+              <button type="button" data-locale="sr">Српски</button>
+              <button type="button" data-locale="lt">Lietuvių</button>
+              <button type="button" data-locale="sl">Slovenščina</button>
+              <button type="button" data-locale="et">Eesti</button>
+              <button type="button" data-locale="lv">Latviešu</button>
+              <button type="button" data-locale="fa">فارسی</button>
+              <button type="button" data-locale="sw">Kiswahili</button>
+            
+</div>
           </section>
           <section class="settings-panel" id="panel-shortcuts" data-panel="shortcuts" aria-labelledby="nav-shortcuts" hidden>
             <p id="shortcut-copy"></p>
@@ -76,7 +116,13 @@
               <button type="button" data-theme="dark"></button>
               <button type="button" data-theme="light"></button>
               <button type="button" data-theme="auto"></button>
+              <button type="button" data-theme="system"></button>
             </div>
+            <p class="field-label" id="accent-label"></p>
+            <div id="accents" class="accents"></div>
+            <label class="check" for="reduced-motion"><input type="checkbox" id="reduced-motion" /> <span id="reduced-motion-label"></span></label>
+            <label class="check" for="sharpen"><input type="checkbox" id="sharpen" /> <span id="sharpen-label"></span></label>
+            <p class="hint" id="sharpen-hint"></p>
             <div id="theme-times" hidden>
               <label class="field" id="light-start-label" for="light-start"></label>
               <input id="light-start" type="time" value="07:00" />
@@ -93,6 +139,7 @@
     </main>
     <script src="i18n.js"></script>
     <script src="settings.js"></script>
+    <script src="layout.js"></script>
     <script src="theme.js"></script>
     <script src="shortcuts.js"></script>
     <script src="options.js"></script>

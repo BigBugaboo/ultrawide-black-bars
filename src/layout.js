@@ -1,5 +1,5 @@
 (function (root) {
-  var MODES = ["original", "ambient", "crop", "stretch"];
+  var MODES = ["original", "ambient", "music", "crop"];
 
   function pictureRect(boxW, boxH, videoW, videoH) {
     if (!(boxW > 0) || !(boxH > 0) || !(videoW > 0) || !(videoH > 0)) return null;
@@ -17,8 +17,6 @@
         letterBars: false,
         scale: scale,
         coverScale: scale,
-        stretchX: boxW / width,
-        stretchY: 1,
         boxW: boxW,
         boxH: boxH,
       };
@@ -35,8 +33,6 @@
         letterBars: true,
         scale: 1,
         coverScale: cover,
-        stretchX: 1,
-        stretchY: cover,
         boxW: boxW,
         boxH: boxH,
       };
@@ -50,8 +46,6 @@
       letterBars: false,
       scale: 1,
       coverScale: 1,
-      stretchX: 1,
-      stretchY: 1,
       boxW: boxW,
       boxH: boxH,
     };
@@ -83,7 +77,7 @@
 
   function shouldRunAmbientLoop(state) {
     state = state || {};
-    return state.mode === "ambient" && !!state.playing && !!state.sideBars;
+    return (state.mode === "ambient" || state.mode === "music") && !!state.playing && !!(state.sideBars || state.letterbox || state.letterBars);
   }
 
   function rowWidth(row) {
@@ -104,30 +98,16 @@
     return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
   }
 
-  function detectBlackBars(rows, options) {
+  function detectBlackBars(pixels, width, height, options) {
+    if (!pixels || !(width > 0) || !(height > 0)) return null;
     options = options || {};
     var threshold = options.threshold == null ? 22 : options.threshold;
     var darkRatio = options.darkRatio == null ? 0.8 : options.darkRatio;
     var minFraction = options.minFraction == null ? 0.04 : options.minFraction;
-    var empty = {
-      left: false,
-      right: false,
-      top: false,
-      bottom: false,
-      leftCols: 0,
-      rightCols: 0,
-      topRows: 0,
-      bottomRows: 0,
-      width: 0,
-      height: 0,
-    };
-    if (!rows || !rows.length) return empty;
-    var height = rows.length;
-    var width = rowWidth(rows[0]);
-    if (!(width > 0)) return empty;
 
     function lumaAt(x, y) {
-      return luma(pixelAt(rows[y], x));
+      var i = (y * width + x) * 4;
+      return luma([pixels[i] || 0, pixels[i + 1] || 0, pixels[i + 2] || 0]);
     }
     function columnDark(x) {
       var dark = 0;
@@ -193,17 +173,37 @@
       bottomOn = false;
     }
     return {
-      left: leftOn,
-      right: rightOn,
-      top: topOn,
-      bottom: bottomOn,
-      leftCols: leftOn ? left : 0,
-      rightCols: rightOn ? right : 0,
-      topRows: topOn ? top : 0,
-      bottomRows: bottomOn ? bottom : 0,
+      left: leftOn ? left : 0,
+      right: rightOn ? right : 0,
+      top: topOn ? top : 0,
+      bottom: bottomOn ? bottom : 0,
+      sideBars: !!(leftOn || rightOn),
+      letterbox: !!(topOn || bottomOn),
       width: width,
       height: height,
     };
+  }
+
+  function fillCropRect(width, height, bars) {
+    bars = bars || {};
+    if (bars.sideBars || bars.left || bars.right) {
+      var left = bars.left || 0;
+      var right = bars.right || 0;
+      return { axis: "x", x: left, y: 0, width: Math.max(0, width - left - right), height: height };
+    }
+    var top = bars.top || 0;
+    var bottom = bars.bottom || 0;
+    return { axis: "y", x: 0, y: top, width: width, height: Math.max(0, height - top - bottom) };
+  }
+
+  function fillScaleForBox(boxW, boxH, videoW, videoH, bars) {
+    bars = bars || {};
+    if (bars.sideBars || bars.left || bars.right) {
+      var contentW = Math.max(1, videoW - (bars.left || 0) - (bars.right || 0));
+      return { axis: "x", scale: boxW / contentW };
+    }
+    var contentH = Math.max(1, videoH - (bars.top || 0) - (bars.bottom || 0));
+    return { axis: "y", scale: boxH / contentH };
   }
 
   function clampScale(n) {
@@ -219,12 +219,12 @@
     var fx = 1;
     var fy = 1;
     if (bars && bars.width && bars.height) {
-      if ((bars.left || bars.right) && (bars.leftCols || 0) + (bars.rightCols || 0) > 0) {
-        var contentW = bars.width - (bars.leftCols || 0) - (bars.rightCols || 0);
+      if (bars.sideBars && (bars.left || 0) + (bars.right || 0) > 0) {
+        var contentW = bars.width - (bars.left || 0) - (bars.right || 0);
         if (contentW > bars.width * 0.5) fx = bars.width / contentW;
       }
-      if ((bars.top || bars.bottom) && (bars.topRows || 0) + (bars.bottomRows || 0) > 0) {
-        var contentH = bars.height - (bars.topRows || 0) - (bars.bottomRows || 0);
+      if (bars.letterbox && (bars.top || 0) + (bars.bottom || 0) > 0) {
+        var contentH = bars.height - (bars.top || 0) - (bars.bottom || 0);
         if (contentH > bars.height * 0.5) fy = bars.height / contentH;
       }
       if (fx > 1.85) fx = 1.85;
@@ -232,15 +232,30 @@
       if (fx < 1.02) fx = 1;
       if (fy < 1.02) fy = 1;
     }
-    if (mode === "stretch") {
-      return {
-        x: clampScale((rect.stretchX || 1) * fx * z),
-        y: clampScale((rect.stretchY || 1) * fy * z),
-      };
-    }
     var cover = (rect.coverScale || 1) * Math.max(fx, fy) * z;
     cover = clampScale(cover);
     return { x: cover, y: cover };
+  }
+
+  function musicBands(samples, count) {
+    count = count > 0 ? count : 8;
+    var out = [];
+    var len = samples && samples.length ? samples.length : 0;
+    for (var b = 0; b < count; b++) {
+      if (!len) {
+        out.push(0);
+        continue;
+      }
+      var start = Math.floor((b * len) / count);
+      var end = Math.max(start + 1, Math.floor(((b + 1) * len) / count));
+      var sum = 0;
+      for (var j = start; j < end; j++) sum += samples[j] || 0;
+      var level = sum / (end - start) / 255;
+      if (level < 0) level = 0;
+      if (level > 1) level = 1;
+      out.push(level);
+    }
+    return out;
   }
 
   function visualPlan(state) {
@@ -253,13 +268,14 @@
     var bars = state.bars;
     var custom = zoom > 1.001 || panX !== 0 || panY !== 0;
     var container = !!(rect && (rect.sideBars || rect.letterBars));
-    var frame = !!(bars && (bars.left || bars.right || bars.top || bars.bottom));
+    var frame = !!(bars && (bars.sideBars || bars.letterbox));
     var scales = modeScales(rect, mode, zoom, bars);
     if (!rect) return { kind: "none", scales: { x: 1, y: 1 } };
     if (mode === "original") return { kind: custom ? "zoom" : "none", scales: { x: zoom, y: zoom } };
     if (mode === "ambient") return { kind: container ? "ambient" : "none", scales: scales };
+    if (mode === "music") return { kind: container ? "music" : "none", scales: scales };
     if (container || frame || custom) {
-      return { kind: mode === "stretch" ? "stretch" : "crop", scales: scales };
+      return { kind: "crop", scales: scales };
     }
     return { kind: "none", scales: scales };
   }
@@ -272,7 +288,10 @@
     ambientSampleDriver: ambientSampleDriver,
     shouldRunAmbientLoop: shouldRunAmbientLoop,
     detectBlackBars: detectBlackBars,
+    fillCropRect: fillCropRect,
+    fillScaleForBox: fillScaleForBox,
     modeScales: modeScales,
+    musicBands: musicBands,
     visualPlan: visualPlan,
   };
 })(typeof globalThis !== "undefined" ? globalThis : this);

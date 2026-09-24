@@ -20,14 +20,18 @@ assert.equal(i18n.resolveLocale(""), "en");
 assert.equal(i18n.resolveLocale("nope"), "en");
 assert.equal(i18n.resolveLocale("zh-CN"), "zh_CN");
 assert.equal(i18n.resolveLocale("zh-TW"), "zh_TW");
-assert.equal(i18n.resolveLocale("pt-BR"), "pt");
-assert.deepEqual([...i18n.LOCALES], ["en", "zh_CN", "zh_TW", "ja", "ko", "es", "fr", "de", "pt", "ru", "it", "tr", "vi", "id"]);
+assert.equal(i18n.resolveLocale("pt-BR"), "pt_BR");
+assert.equal(i18n.resolveLocale("pt-PT"), "pt");
+assert.ok(i18n.LOCALES.length >= 42);
+for (const code of ["en", "zh_CN", "zh_TW", "ja", "ko", "es", "fr", "de", "pt", "pt_BR", "ru", "it", "tr", "vi", "id", "th", "pl", "nl", "ar", "hi", "uk", "cs", "sv", "da", "fi", "no", "el", "he", "ro", "hu", "ms", "fil", "bn", "ca", "sk", "hr", "bg", "sr", "lt", "sl", "et", "lv", "fa", "sw"]) {
+  assert.ok(i18n.LOCALES.includes(code), code);
+}
 assert.equal(i18n.translate("en", "searchLanguages"), "Search languages");
 assert.deepEqual([...i18n.filterLocales("")], [...i18n.LOCALES]);
 assert.deepEqual([...i18n.filterLocales("   ")], [...i18n.LOCALES]);
 assert.deepEqual([...i18n.filterLocales("中文")], ["zh_CN", "zh_TW"]);
-assert.deepEqual([...i18n.filterLocales("en")], ["en"]);
-assert.deepEqual([...i18n.filterLocales("EN")], ["en"]);
+assert.ok(i18n.filterLocales("en").includes("en"));
+assert.ok(i18n.filterLocales("EN").includes("en"));
 assert.deepEqual([...i18n.filterLocales("zzzz-no-such")], []);
 
 const welcomeKeys = ["welcomeTitle", "welcomeBody", "welcomeConfirm"];
@@ -65,6 +69,22 @@ assert.equal(settings.effectiveTheme(overnight, new Date(2026, 0, 1, 22, 0)), "l
 assert.equal(settings.effectiveTheme(overnight, new Date(2026, 0, 1, 2, 0)), "light");
 assert.equal(settings.effectiveTheme(overnight, new Date(2026, 0, 1, 12, 0)), "dark");
 assert.equal(settings.effectiveTheme({ theme: "light" }, new Date(2026, 0, 1, 23, 0)), "light");
+assert.equal(settings.normalizeSettings({ theme: "system" }).theme, "system");
+assert.equal(settings.effectiveTheme({ theme: "system" }, new Date(2026, 0, 1, 23, 0), "light"), "light");
+assert.equal(settings.effectiveTheme({ theme: "system" }, new Date(2026, 0, 1, 10, 0), "dark"), "dark");
+assert.equal(settings.siteMemoryKey("WWW.YouTube.com"), "www.youtube.com");
+assert.equal(
+  settings.pageMemoryKey("https://www.youtube.com/watch?v=abc123&t=10&utm_source=share"),
+  "https://www.youtube.com/watch?v=abc123"
+);
+assert.equal(settings.ACCENTS.length, 16);
+assert.equal(settings.normalizeSettings({ mode: "stretch" }).mode, "crop");
+assert.equal(settings.normalizeSettings({}).musicStyle, "bars");
+assert.equal(settings.normalizeSettings({ musicStyle: "drops" }).musicStyle, "drops");
+assert.equal(settings.normalizeSettings({ musicStyle: "nope" }).musicStyle, "bars");
+var hiddenAll = settings.normalizeSettings({ hiddenModes: ["original", "ambient", "music", "crop"] }).hiddenModes;
+assert.ok(hiddenAll.indexOf("original") < 0);
+assert.ok(hiddenAll.length < 4);
 assert.equal(defaults.dropEnabled, false);
 assert.equal(Object.prototype.hasOwnProperty.call(defaults, "enabled"), false);
 assert.equal(settings.normalizeSettings({ enabled: false, mode: "ambient" }).mode, "original");
@@ -166,7 +186,8 @@ assert.doesNotMatch(popupHtml, /id="enabled"/);
 assert.doesNotMatch(popupHtml, /<select/);
 assert.match(popupHtml, /id="lang-toggle"/);
 assert.match(popupHtml, /id="open-settings"/);
-assert.doesNotMatch(popupHtml, /data-blur/);
+assert.match(popupHtml, /data-blur="medium"/);
+assert.match(popupHtml, /data-music-style="breath"/);
 
 const optionsHtml = readFileSync(new URL("../src/options.html", import.meta.url), "utf8");
 assert.match(optionsHtml, /id="settings-nav"/);
@@ -208,13 +229,84 @@ assert.match(optionsJs, /var panel = "mode"/);
 assert.match(optionsJs, /section\.hidden = section\.dataset\.panel !== panel/);
 assert.match(optionsJs, /chrome\.storage\.local\.set/);
 assert.match(optionsJs, /panelKey/);
+assert.match(optionsJs, /button\.hidden = !label/);
+
+function optionsElement() {
+  return {
+    hidden: false,
+    textContent: "",
+    value: "",
+    dataset: {},
+    style: { setProperty() {} },
+    classList: { toggle() {}, add() {}, remove() {} },
+    setAttribute() {},
+    removeAttribute() {},
+    addEventListener() {},
+    appendChild() {},
+    querySelectorAll() {
+      return [];
+    },
+    closest() {
+      return this;
+    },
+    nextElementSibling: { textContent: "" },
+    childElementCount: 0,
+  };
+}
+const optionsSandbox = {
+  document: {
+    documentElement: { lang: "en" },
+    title: "",
+    querySelector() {
+      return optionsElement();
+    },
+    querySelectorAll() {
+      return [];
+    },
+  },
+  chrome: {
+    storage: {
+      local: {
+        get() {},
+        set() {},
+        remove() {},
+      },
+    },
+  },
+};
+optionsSandbox.globalThis = optionsSandbox;
+vm.runInNewContext(optionsJs, optionsSandbox);
+const panelIds = ["mode", "language", "shortcuts", "appearance", "future"];
+const sections = panelIds.map((id) => ({ dataset: { panel: id }, hidden: false }));
+for (const id of panelIds) {
+  optionsSandbox.UbbOptions.applyPanelVisibility(sections, id);
+  const visible = sections.filter((section) => !section.hidden).map((section) => section.dataset.panel);
+  assert.deepEqual(visible, [id], id);
+}
+const modeEntries = optionsSandbox.UbbOptions.labeledModeNames(
+  ["original", "ambient", "crop"],
+  (key) => i18n.translate("en", key)
+);
+assert.ok(modeEntries.length >= 3);
+for (const entry of modeEntries) {
+  assert.equal(typeof entry.label, "string");
+  assert.ok(entry.label.trim().length > 0, entry.name);
+}
+assert.ok(modeEntries.some((entry) => entry.name === "original"));
+assert.ok(modeEntries.some((entry) => entry.name === "ambient"));
+assert.ok(modeEntries.some((entry) => entry.name === "crop"));
 
 const popupCss = readFileSync(new URL("../src/popup.css", import.meta.url), "utf8");
 assert.match(popupCss, /body\.welcome\.settings main\s*\{[^}]*height:\s*min\(640px,\s*calc\(100vh - 48px\)\)/);
 assert.match(popupCss, /body\.welcome\.settings \.settings-panel\s*\{[^}]*overflow:\s*auto/);
+assert.match(popupCss, /body\.welcome\.settings \.settings-panel\[hidden\]\s*\{[^}]*display:\s*none\s*!important/);
+assert.match(popupCss, /label\.check\[hidden\][\s\S]*display:\s*none\s*!important/);
+assert.match(popupCss, /body\.welcome\.settings #languages\s*\{[^}]*flex:\s*1/);
 assert.match(popupCss, /body\.welcome\.settings #languages\s*\{[^}]*overflow:\s*auto/);
+assert.doesNotMatch(popupCss, /#languages\s*\{[^}]*max-height/);
 
 const popupSource = readFileSync(new URL("../src/popup.js", import.meta.url), "utf8");
+assert.match(popupSource, /button\.hidden = !label/);
 assert.match(popupSource, /openOptionsPage\s*\(/);
 assert.match(popupSource, /function openExtensionOptions/);
 assert.match(popupSource, /function bindOpenSettings/);

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "अल्ट्रावाइड स्क्रीन पर 16:9 वीडियो की किनारे की काली पट्टियाँ हटाता है।"
+  },
+  "commandCycle": {
+    "message": "मूल, परिवेश, भरें और खींचें के बीच बदलें"
+  }
+}

@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "Entfernt die seitlichen schwarzen Balken bei 16:9-Videos auf Ultrawide-Bildschirmen."
+    "message": "Entfernt seitliche schwarze Balken bei 16:9-Video auf Ultrawide-Bildschirmen."
   },
   "commandCycle": {
-    "message": "Zwischen Original, Umgebungslicht und Füllen wechseln"
+    "message": "Zwischen Original, Umgebungslicht, Füllen und Strecken wechseln"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Прибирає бічні чорні смуги у відео 16:9 на ультрашироких екранах."
+  },
+  "commandCycle": {
+    "message": "Перемикати вихідний, оточення, заповнення й розтяг"
+  }
+}

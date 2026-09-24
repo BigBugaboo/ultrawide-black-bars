@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Odstraňuje bočné čierne pruhy pri videu 16:9 na ultrawide obrazovkách."
+  },
+  "commandCycle": {
+    "message": "Prepínať pôvodné, prostredie, vyplniť a roztiahnuť"
+  }
+}

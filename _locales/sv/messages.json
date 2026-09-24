@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Tar bort sidostaplarna hos 16:9-video på ultrawide-skärmar."
+  },
+  "commandCycle": {
+    "message": "Växla mellan original, stämning, fyll och sträck"
+  }
+}

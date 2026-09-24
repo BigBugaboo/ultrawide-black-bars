@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Pašalina 16:9 vaizdo šonines juodas juostas ultrabroad ekranuose."
+  },
+  "commandCycle": {
+    "message": "Perjungti originalą, aplinką, užpildymą ir ištempimą"
+  }
+}
