@@ -42,7 +42,11 @@
                   <p class="field-label" id="bar-custom-label"></p>
                   <input id="bar-color" type="color" value="#ffd60a" aria-labelledby="bar-custom-label" />
                   <p class="field-label" id="bar-preset-label"></p>
-                  <button type="button" id="bar-rainbow"></button>
+                  <div class="modes" id="bar-presets">
+                    <button type="button" data-bar-palette="rainbow"></button>
+                    <button type="button" data-bar-palette="classic"></button>
+                    <button type="button" data-bar-palette="flow"></button>
+                  </div>
                 </div>
               </div>
               <button type="button" data-mode="crop"></button>

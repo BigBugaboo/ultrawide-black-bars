@@ -10,6 +10,7 @@
   var musicStyle = "bars";
   var barColor = "#ffd60a";
   var barPalette = "solid";
+  var rainbowPhase = 0;
   var hiddenModes = [];
   var sharpen = false;
   var reducedMotion = false;
@@ -74,7 +75,7 @@
     ambientBlur = next.ambientBlur;
     musicStyle = next.musicStyle || "bars";
     barColor = next.barColor || "#ffd60a";
-    barPalette = next.barPalette === "rainbow" ? "rainbow" : "solid";
+    barPalette = next.barPalette === "rainbow" || next.barPalette === "classic" || next.barPalette === "flow" ? next.barPalette : "solid";
     hiddenModes = next.hiddenModes || [];
     sharpen = !!next.sharpen;
     reducedMotion = !!next.reducedMotion;
@@ -429,10 +430,8 @@
     ctx.closePath();
   }
 
-  function pastelRgb(hue) {
+  function hslRgb(hue, s, l) {
     var h = ((hue % 360) + 360) % 360;
-    var s = 0.45;
-    var l = 0.78;
     var c = (1 - Math.abs(2 * l - 1)) * s;
     var hp = h / 60;
     var x = c * (1 - Math.abs((hp % 2) - 1));
@@ -453,6 +452,10 @@
     };
   }
 
+  function pastelRgb(hue) {
+    return hslRgb(hue, 0.45, 0.78);
+  }
+
   function barRgb(hex) {
     var match = /^#([0-9a-f]{6})$/i.exec(hex || "");
     var n = match ? parseInt(match[1], 16) : 0xffd60a;
@@ -461,6 +464,28 @@
 
   function mixWhite(channel, amount) {
     return Math.round(channel + (255 - channel) * amount);
+  }
+
+  function rgba(rgb, white, alpha) {
+    return "rgba(" + mixWhite(rgb.r, white) + "," + mixWhite(rgb.g, white) + "," + mixWhite(rgb.b, white) + "," + alpha + ")";
+  }
+
+  function barTone(index, count) {
+    var hue = (index / count) * 360;
+    if (barPalette === "flow") {
+      hue = (rainbowPhase + hue) % 360;
+      return { bottom: hslRgb(hue, 0.95, 0.55), mid: hslRgb((hue + 36) % 360, 0.95, 0.58), top: hslRgb((hue + 70) % 360, 0.9, 0.62) };
+    }
+    if (barPalette === "classic") {
+      var vivid = hslRgb(hue, 0.92, 0.52);
+      return { bottom: vivid, mid: vivid, top: vivid };
+    }
+    if (barPalette === "rainbow") {
+      var soft = pastelRgb(hue);
+      return { bottom: soft, mid: soft, top: soft };
+    }
+    var solid = barRgb(barColor);
+    return { bottom: solid, mid: solid, top: solid };
   }
 
   function drawChannel(canvas, levels, width, height, reverse) {
@@ -477,6 +502,7 @@
     var ctx = canvas.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
+    if (barPalette === "flow") rainbowPhase = (rainbowPhase + 1.8) % 360;
     var n = levels && levels.length ? levels.length : 8;
     var colW = w / n;
     for (var i = 0; i < n; i++) {
@@ -485,11 +511,11 @@
       var lit = Math.max(h * 0.06, Math.min(h * 0.96, amp * h * 0.92));
       var x = i * colW;
       var y = h - lit;
-      var rgb = barPalette === "rainbow" ? pastelRgb((i / n) * 360) : barRgb(barColor);
+      var tone = barTone(i, n);
       var glow = ctx.createLinearGradient(0, h, 0, y);
-      glow.addColorStop(0, "rgba(" + mixWhite(rgb.r, 0.35) + "," + mixWhite(rgb.g, 0.35) + "," + mixWhite(rgb.b, 0.35) + ",0.92)");
-      glow.addColorStop(0.45, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.62)");
-      glow.addColorStop(1, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0)");
+      glow.addColorStop(0, rgba(tone.bottom, 0.35, 0.92));
+      glow.addColorStop(0.45, rgba(tone.mid, 0, 0.7));
+      glow.addColorStop(1, rgba(tone.top, 0, 0));
       ctx.fillStyle = glow;
       ctx.fillRect(x, y, colW + 0.5, lit);
     }

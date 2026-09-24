@@ -55,7 +55,7 @@
   }
 
   function normalizeBarPalette(value) {
-    if (value === "solid" || value === "rainbow") return value;
+    if (value === "solid" || value === "rainbow" || value === "classic" || value === "flow") return value;
     return "solid";
   }
 

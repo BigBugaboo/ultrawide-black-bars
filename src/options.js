@@ -27,7 +27,7 @@ var barColorGroup = document.querySelector("#bar-color-group");
 var barCustomLabel = document.querySelector("#bar-custom-label");
 var barPresetLabel = document.querySelector("#bar-preset-label");
 var barColorInput = document.querySelector("#bar-color");
-var barRainbow = document.querySelector("#bar-rainbow");
+var barPresetButtons = document.querySelectorAll("#bar-presets button");
 var languageButtons = document.querySelectorAll("#languages button");
 var languageSearch = document.querySelector("#language-search");
 var languageEmpty = document.querySelector("#language-empty");
@@ -146,10 +146,12 @@ function render() {
   if (barCustomLabel) barCustomLabel.textContent = t("barCustom");
   if (barPresetLabel) barPresetLabel.textContent = t("barPreset");
   if (barColorInput && document.activeElement !== barColorInput) barColorInput.value = barColor;
-  if (barRainbow) {
-    barRainbow.textContent = t("barRainbow");
-    barRainbow.classList.toggle("active", barPalette === "rainbow");
-  }
+  barPresetButtons.forEach(function (button) {
+    var name = button.dataset.barPalette;
+    var key = name === "classic" ? "barClassic" : name === "flow" ? "barFlow" : "barRainbow";
+    button.textContent = t(key);
+    button.classList.toggle("active", name === barPalette);
+  });
   blurLabel.textContent = t("blur");
   blurButtons.forEach(function (button) {
     var name = button.dataset.blur;
@@ -294,13 +296,13 @@ if (barColorInput) {
   });
 }
 
-if (barRainbow) {
-  barRainbow.addEventListener("click", function () {
-    barPalette = "rainbow";
+barPresetButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    barPalette = button.dataset.barPalette;
     persist({ barPalette: barPalette });
     render();
   });
-}
+});
 
 languageButtons.forEach(function (button) {
   button.addEventListener("click", function () {
