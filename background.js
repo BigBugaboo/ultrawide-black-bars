@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'ubb-mode';
+const FEEDBACK_KEY = 'ubb-feedback';
 const MODES = ['original', 'crop', 'ambient'];
 
 function normalizeMode(mode) {
@@ -22,6 +23,13 @@ chrome.commands.onCommand.addListener((command) => {
   }
 
   chrome.storage.local.get({ [STORAGE_KEY]: MODES[0] }, (items) => {
-    chrome.storage.local.set({ [STORAGE_KEY]: nextMode(items[STORAGE_KEY]) });
+    const mode = nextMode(items[STORAGE_KEY]);
+    chrome.storage.local.set({
+      [STORAGE_KEY]: mode,
+      [FEEDBACK_KEY]: {
+        mode,
+        timestamp: Date.now()
+      }
+    });
   });
 });

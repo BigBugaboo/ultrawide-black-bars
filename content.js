@@ -1,5 +1,6 @@
 (() => {
   const STORAGE_KEY = 'ubb-mode';
+  const FEEDBACK_KEY = 'ubb-feedback';
   const MODES = ['original', 'crop', 'ambient'];
   const MODE_LABELS = {
     original: 'Original',
@@ -17,7 +18,8 @@
     toast: null,
     syncScheduled: false,
     syncPlayback: null,
-    pendingFeedback: false
+    pendingFeedback: false,
+    ambientSupported: true
   };
 
   function normalizeMode(mode) {
@@ -153,6 +155,7 @@
     state.video = null;
     state.ambient = null;
     state.syncPlayback = null;
+    state.ambientSupported = true;
   }
 
   function playAmbientVideos() {
@@ -183,6 +186,14 @@
     const streamFactory = video.captureStream || video.mozCaptureStream;
     const stream = typeof streamFactory === 'function' ? streamFactory.call(video) : null;
 
+    state.ambientSupported = Boolean(stream);
+
+    if (!stream) {
+      state.wrapper.prepend(ambient);
+      state.ambient = ambient;
+      return;
+    }
+
     for (let index = 0; index < 2; index += 1) {
       const ambientVideo = document.createElement('video');
       ambientVideo.className = 'ubb-ambient-video';
@@ -190,12 +201,7 @@
       ambientVideo.autoplay = true;
       ambientVideo.playsInline = true;
       ambientVideo.setAttribute('aria-hidden', 'true');
-
-      if (stream) {
-        ambientVideo.srcObject = stream;
-      } else {
-        ambientVideo.src = video.currentSrc || video.src;
-      }
+      ambientVideo.srcObject = stream;
 
       ambient.appendChild(ambientVideo);
       state.ambientVideos.push(ambientVideo);
@@ -252,7 +258,11 @@
 
     ensureAmbient(wrapper, video);
 
-    const effectiveMode = isUltrawideViewport() ? state.requestedMode : 'original';
+    const preferredMode =
+      state.requestedMode === 'ambient' && !state.ambientSupported
+        ? 'original'
+        : state.requestedMode;
+    const effectiveMode = isUltrawideViewport() ? preferredMode : 'original';
     state.wrapper.dataset.ubbMode = effectiveMode;
     state.video.style.objectFit =
       effectiveMode === 'crop'
@@ -264,7 +274,13 @@
     }
 
     if (showFeedback) {
-      const suffix = effectiveMode !== state.requestedMode ? ' (ultrawide only)' : '';
+      let suffix = '';
+      if (state.requestedMode === 'ambient' && !state.ambientSupported) {
+        suffix = ' (not supported here)';
+      } else if (effectiveMode !== state.requestedMode) {
+        suffix = ' (ultrawide only)';
+      }
+
       showToast(`${MODE_LABELS[state.requestedMode]}${suffix}`);
     }
   }
@@ -294,12 +310,18 @@
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName !== 'local' || !changes[STORAGE_KEY]) {
+      if (areaName !== 'local') {
         return;
       }
 
-      state.requestedMode = normalizeMode(changes[STORAGE_KEY].newValue);
-      scheduleSync(true);
+      if (changes[STORAGE_KEY]) {
+        state.requestedMode = normalizeMode(changes[STORAGE_KEY].newValue);
+        scheduleSync(false);
+      }
+
+      if (changes[FEEDBACK_KEY]) {
+        scheduleSync(true);
+      }
     });
 
     const observer = new MutationObserver(() => scheduleSync(false));

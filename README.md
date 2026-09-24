@@ -7,7 +7,7 @@ Ultrawide Black Bars / 带鱼屏视频去黑边 is a Manifest V3 browser extensi
 1. Open your Chromium browser's extensions page.
 2. Enable **Developer mode**.
 3. Choose **Load unpacked**.
-4. Select `/home/runner/work/ultrawide-black-bars/ultrawide-black-bars`.
+4. Select the cloned or downloaded `ultrawide-black-bars` project folder.
 5. Open a Bilibili video page and use the popup or `Alt+Shift+U` to cycle modes.
 
 Keywords: ultrawide, black bars, 21:9, Bilibili.
