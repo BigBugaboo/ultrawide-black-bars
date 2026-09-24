@@ -208,8 +208,26 @@
     scaleTargets = [];
   }
 
+  var sideChrome = "";
+
+  function useSideChrome(kind) {
+    var key = kind === "ambient" ? "ambient:" + ambientBlur : "music";
+    if (sideChrome === key) return;
+    sideChrome = key;
+    ensureNodes();
+    area.classList.add("ubb-player", kind === "music" ? "ubb-music" : "ubb-ambient");
+    area.classList.remove("ubb-crop", "ubb-zoom");
+    if (kind === "music") area.classList.remove("ubb-ambient");
+    else area.classList.remove("ubb-music");
+    area.style.removeProperty("--ubb-scale");
+    area.style.removeProperty("--ubb-blur");
+    if (kind === "ambient") area.style.setProperty("--ubb-blur", settingsApi.blurRadius(ambientBlur) + "px");
+    clearScaleTargets();
+  }
+
   function clearEffects() {
     if (!area) return;
+    sideChrome = "";
     area.classList.remove("ubb-crop", "ubb-ambient", "ubb-music", "ubb-zoom");
     area.style.removeProperty("--ubb-scale");
     area.style.removeProperty("--ubb-scale-x");
@@ -283,17 +301,6 @@
     try {
       ctx.drawImage(videoEl, 0, 0, SAMPLE_W, SAMPLE_H);
       var data = ctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H).data;
-      var rows = new Array(SAMPLE_H);
-      for (var y = 0; y < SAMPLE_H; y++) {
-        var row = new Array(SAMPLE_W * 3);
-        var off = y * SAMPLE_W * 4;
-        for (var x = 0; x < SAMPLE_W; x++) {
-          row[x * 3] = data[off + x * 4];
-          row[x * 3 + 1] = data[off + x * 4 + 1];
-          row[x * 3 + 2] = data[off + x * 4 + 2];
-        }
-        rows[y] = row;
-      }
       value = { pending: false, failed: false, bars: layout.detectBlackBars(data, SAMPLE_W, SAMPLE_H) };
     } catch (err) {
       value = { pending: false, failed: true, bars: null };
@@ -309,12 +316,7 @@
       clearEffects();
       return;
     }
-    ensureNodes();
-    area.classList.add("ubb-player", "ubb-ambient");
-    area.classList.remove("ubb-crop", "ubb-music", "ubb-zoom");
-    area.style.removeProperty("--ubb-scale");
-    area.style.setProperty("--ubb-blur", settingsApi.blurRadius(ambientBlur) + "px");
-    clearScaleTargets();
+    useSideChrome("ambient");
     placeBars(rect);
     if (sampleCanvas.width !== SAMPLE_W || sampleCanvas.height !== SAMPLE_H) {
       sampleCanvas.width = SAMPLE_W;
@@ -643,7 +645,7 @@
   }
 
   function drawBreath(canvas, wash, levels, energy, width, height) {
-    var box = sizeCanvas(canvas, width, height);
+    var box = sizeCanvas(canvas, Math.min(width, 72), Math.min(height, 160));
     if (!box || !wash) return;
     stepWash(wash, energy);
     var base = wash.blobs[0];
@@ -670,12 +672,7 @@
       clearEffects();
       return;
     }
-    ensureNodes();
-    area.classList.add("ubb-player", "ubb-music");
-    area.classList.remove("ubb-crop", "ubb-ambient", "ubb-zoom");
-    area.style.removeProperty("--ubb-scale");
-    area.style.removeProperty("--ubb-blur");
-    clearScaleTargets();
+    useSideChrome("music");
     placeBars(rect);
     var sideH = video.clientHeight || rect.boxH || rect.height;
     var leftW = Math.max(rect.x || 0, 8);
