@@ -172,6 +172,26 @@
     }
   }
 
+  function canUseAmbient(video) {
+    const hasCaptureStream =
+      typeof video.captureStream === 'function' || typeof video.mozCaptureStream === 'function';
+    if (!hasCaptureStream) {
+      return false;
+    }
+
+    const source = video.currentSrc || video.src;
+    if (!source) {
+      return false;
+    }
+
+    try {
+      const sourceUrl = new URL(source, window.location.href);
+      return sourceUrl.protocol === 'blob:' || sourceUrl.origin === window.location.origin;
+    } catch {
+      return false;
+    }
+  }
+
   function ensureAmbient(wrapper, video) {
     if (state.wrapper === wrapper && state.ambient) {
       return;
@@ -184,6 +204,13 @@
 
     const ambient = document.createElement('div');
     ambient.className = 'ubb-ambient';
+
+    if (!canUseAmbient(video)) {
+      state.ambientSupported = false;
+      state.wrapper.prepend(ambient);
+      state.ambient = ambient;
+      return;
+    }
 
     const streamFactory = video.captureStream || video.mozCaptureStream;
     const stream = typeof streamFactory === 'function' ? streamFactory.call(video) : null;
