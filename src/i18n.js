@@ -105,7 +105,7 @@
         "accent": "Accent color",
         "reducedMotion": "Reduce motion",
         "sharpen": "Mild sharpen",
-        "sharpenHint": "A light sharpen on this device. This is not AI upscaling.",
+        "sharpenHint": "Lightly sharpens edges on this device.",
         "visibleModes": "Modes shown in the popup"
     },
     "zh_CN": {
@@ -165,7 +165,7 @@
         "accent": "强调色",
         "reducedMotion": "减弱动效",
         "sharpen": "轻微锐化",
-        "sharpenHint": "只在这台设备上做轻度锐化，不是 AI 超分。",
+        "sharpenHint": "只在这台设备上稍微加强画面边缘。",
         "visibleModes": "弹窗里显示的模式"
     },
     "zh_TW": {
@@ -225,7 +225,7 @@
         "accent": "強調色",
         "reducedMotion": "減弱動效",
         "sharpen": "輕微銳化",
-        "sharpenHint": "只在這台裝置上做輕度銳化，不是 AI 超分。",
+        "sharpenHint": "只在這台裝置上稍微加強畫面邊緣。",
         "visibleModes": "彈出視窗裡顯示的模式"
     },
     "ja": {
@@ -285,7 +285,7 @@
         "accent": "アクセントカラー",
         "reducedMotion": "動作を減らす",
         "sharpen": "軽いシャープ",
-        "sharpenHint": "この端末だけで軽くシャープにします。AI 超解像ではありません。",
+        "sharpenHint": "この端末上で、輪郭を少しだけ強調します。",
         "visibleModes": "ポップアップに出すモード"
     },
     "ko": {
@@ -345,7 +345,7 @@
         "accent": "강조 색",
         "reducedMotion": "동작 줄이기",
         "sharpen": "약한 선명화",
-        "sharpenHint": "이 기기에서만 약하게 선명하게 합니다. AI 업스케일이 아닙니다.",
+        "sharpenHint": "이 기기에서 가장자리만 조금 또렷하게 합니다.",
         "visibleModes": "팝업에 보이는 모드"
     },
     "es": {
@@ -405,7 +405,7 @@
         "accent": "Color de acento",
         "reducedMotion": "Reducir movimiento",
         "sharpen": "Nitidez leve",
-        "sharpenHint": "Un enfoque leve en este dispositivo. No es un escalado con IA.",
+        "sharpenHint": "Refuerza un poco los bordes en este dispositivo.",
         "visibleModes": "Modos visibles en la ventana"
     },
     "fr": {
@@ -465,7 +465,7 @@
         "accent": "Couleur d'accent",
         "reducedMotion": "Réduire les animations",
         "sharpen": "Léger renforcement",
-        "sharpenHint": "Un léger renforcement sur cet appareil. Ce n'est pas une mise à l'échelle par IA.",
+        "sharpenHint": "Renforce légèrement les contours sur cet appareil.",
         "visibleModes": "Modes affichés dans la fenêtre"
     },
     "de": {
@@ -525,7 +525,7 @@
         "accent": "Akzentfarbe",
         "reducedMotion": "Animationen reduzieren",
         "sharpen": "Leichte Schärfung",
-        "sharpenHint": "Eine leichte Schärfung auf diesem Gerät. Keine KI-Hochskalierung.",
+        "sharpenHint": "Hebt auf diesem Gerät die Kanten leicht hervor.",
         "visibleModes": "Modi im Fenster"
     },
     "pt": {
@@ -585,7 +585,7 @@
         "accent": "Cor de destaque",
         "reducedMotion": "Reduzir movimento",
         "sharpen": "Nitidez ligeira",
-        "sharpenHint": "Uma nitidez ligeira neste dispositivo. Não é aumento por IA.",
+        "sharpenHint": "Reforça um pouco as bordas neste dispositivo.",
         "visibleModes": "Modos mostrados na janela"
     },
     "ru": {
@@ -645,7 +645,7 @@
         "accent": "Цвет акцента",
         "reducedMotion": "Меньше анимации",
         "sharpen": "Лёгкая резкость",
-        "sharpenHint": "Лёгкая резкость на этом устройстве. Это не ИИ-увеличение.",
+        "sharpenHint": "Слегка подчёркивает края на этом устройстве.",
         "visibleModes": "Режимы во всплывающем окне"
     },
     "it": {
@@ -705,7 +705,7 @@
         "accent": "Colore accento",
         "reducedMotion": "Riduci le animazioni",
         "sharpen": "Nitidezza leggera",
-        "sharpenHint": "Una leggera nitidezza su questo dispositivo. Non è un upscaling IA.",
+        "sharpenHint": "Rafforza leggermente i bordi su questo dispositivo.",
         "visibleModes": "Modalità mostrate nella finestra"
     },
     "tr": {
@@ -765,7 +765,7 @@
         "accent": "Vurgu rengi",
         "reducedMotion": "Hareketi azalt",
         "sharpen": "Hafif keskinleştirme",
-        "sharpenHint": "Yalnızca bu cihazda hafif keskinleştirme. Yapay zeka büyütme değildir.",
+        "sharpenHint": "Bu cihazda kenarları biraz belirginleştirir.",
         "visibleModes": "Pencerede görünen modlar"
     },
     "vi": {
@@ -825,7 +825,7 @@
         "accent": "Màu nhấn",
         "reducedMotion": "Giảm chuyển động",
         "sharpen": "Làm nét nhẹ",
-        "sharpenHint": "Chỉ làm nét nhẹ trên máy này. Không phải phóng to bằng AI.",
+        "sharpenHint": "Làm rõ nhẹ các cạnh trên máy này.",
         "visibleModes": "Chế độ hiện trong cửa sổ"
     },
     "id": {
@@ -885,7 +885,7 @@
         "accent": "Warna aksen",
         "reducedMotion": "Kurangi gerak",
         "sharpen": "Ketajaman ringan",
-        "sharpenHint": "Ketajaman ringan di perangkat ini. Bukan peningkatan AI.",
+        "sharpenHint": "Mempertegas sedikit tepi di perangkat ini.",
         "visibleModes": "Mode yang tampil di jendela"
     },
     "pt_BR": {
@@ -945,7 +945,7 @@
         "accent": "Cor de destaque",
         "reducedMotion": "Reduzir movimento",
         "sharpen": "Nitidez leve",
-        "sharpenHint": "Uma nitidez leve neste aparelho. Não é aumento por IA.",
+        "sharpenHint": "Reforça um pouco as bordas neste aparelho.",
         "visibleModes": "Modos mostrados na janela"
     },
     "th": {
@@ -1005,7 +1005,7 @@
         "accent": "สีเน้น",
         "reducedMotion": "ลดการเคลื่อนไหว",
         "sharpen": "เพิ่มความคมเล็กน้อย",
-        "sharpenHint": "เพิ่มความคมเบา ๆ บนเครื่องนี้ ไม่ใช่การขยายภาพด้วย AI",
+        "sharpenHint": "เน้นขอบเล็กน้อยบนเครื่องนี้",
         "visibleModes": "โหมดที่แสดงในหน้าต่าง"
     },
     "pl": {
@@ -1065,7 +1065,7 @@
         "accent": "Kolor akcentu",
         "reducedMotion": "Mniej animacji",
         "sharpen": "Lekkie wyostrzenie",
-        "sharpenHint": "Lekkie wyostrzenie na tym urządzeniu. To nie jest skalowanie przez AI.",
+        "sharpenHint": "Lekko podkreśla krawędzie na tym urządzeniu.",
         "visibleModes": "Tryby widoczne w oknie"
     },
     "nl": {
@@ -1125,7 +1125,7 @@
         "accent": "Accentkleur",
         "reducedMotion": "Minder beweging",
         "sharpen": "Lichte verscherping",
-        "sharpenHint": "Een lichte verscherping op dit apparaat. Geen AI-opschaling.",
+        "sharpenHint": "Maakt randen op dit apparaat iets scherper.",
         "visibleModes": "Modi in het venster"
     },
     "ar": {
@@ -1185,7 +1185,7 @@
         "accent": "لون التمييز",
         "reducedMotion": "تقليل الحركة",
         "sharpen": "حدة خفيفة",
-        "sharpenHint": "حدة خفيفة على هذا الجهاز. هذا ليس تكبيرًا بالذكاء الاصطناعي.",
+        "sharpenHint": "يبرز الحواف قليلاً على هذا الجهاز.",
         "visibleModes": "الأوضاع الظاهرة في النافذة"
     },
     "hi": {
@@ -1245,7 +1245,7 @@
         "accent": "प्रमुख रंग",
         "reducedMotion": "गति कम करें",
         "sharpen": "हल्की तीक्ष्णता",
-        "sharpenHint": "इस डिवाइस पर हल्की तीक्ष्णता। यह AI आवर्धन नहीं है।",
+        "sharpenHint": "इस डिवाइस पर किनारों को थोड़ा स्पष्ट करता है।",
         "visibleModes": "पॉपअप में दिखने वाले मोड"
     },
     "uk": {
@@ -1305,7 +1305,7 @@
         "accent": "Колір акценту",
         "reducedMotion": "Менше анімації",
         "sharpen": "Легка різкість",
-        "sharpenHint": "Легка різкість на цьому пристрої. Це не збільшення за допомогою ШІ.",
+        "sharpenHint": "Злегка підкреслює краї на цьому пристрої.",
         "visibleModes": "Режими у спливному вікні"
     },
     "cs": {
@@ -1365,7 +1365,7 @@
         "accent": "Barva zvýraznění",
         "reducedMotion": "Omezit pohyb",
         "sharpen": "Mírné zostření",
-        "sharpenHint": "Mírné zostření na tomto zařízení. Není to zvětšení pomocí AI.",
+        "sharpenHint": "Na tomto zařízení mírně zvýrazní hrany.",
         "visibleModes": "Režimy v okně"
     },
     "sv": {
@@ -1425,7 +1425,7 @@
         "accent": "Accentfärg",
         "reducedMotion": "Minska rörelse",
         "sharpen": "Lätt skärpa",
-        "sharpenHint": "En lätt skärpa på den här enheten. Det är inte AI-uppskalning.",
+        "sharpenHint": "Framhäver kanterna lätt på den här enheten.",
         "visibleModes": "Lägen som visas i fönstret"
     },
     "da": {
@@ -1485,7 +1485,7 @@
         "accent": "Accentfarve",
         "reducedMotion": "Mindre bevægelse",
         "sharpen": "Let skarphed",
-        "sharpenHint": "En let skarphed på denne enhed. Det er ikke AI-opskalering.",
+        "sharpenHint": "Fremhæver kanterne let på denne enhed.",
         "visibleModes": "Tilstande vist i vinduet"
     },
     "fi": {
@@ -1545,7 +1545,7 @@
         "accent": "Korostusväri",
         "reducedMotion": "Vähennä liikettä",
         "sharpen": "Kevyt terävöitys",
-        "sharpenHint": "Kevyt terävöitys tällä laitteella. Tämä ei ole tekoälysuurennusta.",
+        "sharpenHint": "Korostaa reunoja kevyesti tällä laitteella.",
         "visibleModes": "Ikkunassa näkyvät tilat"
     },
     "no": {
@@ -1605,7 +1605,7 @@
         "accent": "Aksentfarge",
         "reducedMotion": "Mindre bevegelse",
         "sharpen": "Lett skarphet",
-        "sharpenHint": "En lett skarphet på denne enheten. Det er ikke AI-oppskalering.",
+        "sharpenHint": "Fremhever kantene lett på denne enheten.",
         "visibleModes": "Moduser som vises i vinduet"
     },
     "el": {
@@ -1665,7 +1665,7 @@
         "accent": "Χρώμα έμφασης",
         "reducedMotion": "Λιγότερη κίνηση",
         "sharpen": "Ελαφριά όξυνση",
-        "sharpenHint": "Ελαφριά όξυνση σε αυτή τη συσκευή. Δεν είναι μεγέθυνση με AI.",
+        "sharpenHint": "Τονίζει ελαφρά τις άκρες σε αυτή τη συσκευή.",
         "visibleModes": "Λειτουργίες στο παράθυρο"
     },
     "he": {
@@ -1725,7 +1725,7 @@
         "accent": "צבע הדגשה",
         "reducedMotion": "הפחתת תנועה",
         "sharpen": "חידוד קל",
-        "sharpenHint": "חידוד קל במכשיר הזה. זו אינה הגדלה בבינה מלאכותית.",
+        "sharpenHint": "מדגיש מעט את הקצוות במכשיר הזה.",
         "visibleModes": "מצבים שמופיעים בחלון"
     },
     "ro": {
@@ -1785,7 +1785,7 @@
         "accent": "Culoare de accent",
         "reducedMotion": "Redu mișcarea",
         "sharpen": "Claritate ușoară",
-        "sharpenHint": "O claritate ușoară pe acest dispozitiv. Nu este mărire cu IA.",
+        "sharpenHint": "Evidențiază ușor marginile pe acest dispozitiv.",
         "visibleModes": "Moduri afișate în fereastră"
     },
     "hu": {
@@ -1845,7 +1845,7 @@
         "accent": "Kiemelőszín",
         "reducedMotion": "Kevesebb mozgás",
         "sharpen": "Enyhe élesítés",
-        "sharpenHint": "Enyhe élesítés ezen az eszközön. Ez nem MI-nagyítás.",
+        "sharpenHint": "Enyhén kiemeli a széleket ezen az eszközön.",
         "visibleModes": "Az ablakban látható módok"
     },
     "ms": {
@@ -1905,7 +1905,7 @@
         "accent": "Warna penekanan",
         "reducedMotion": "Kurangkan gerakan",
         "sharpen": "Ketajaman ringan",
-        "sharpenHint": "Ketajaman ringan pada peranti ini. Ini bukan pembesaran AI.",
+        "sharpenHint": "Menegaskan sedikit tepi pada peranti ini.",
         "visibleModes": "Mod yang dipaparkan di tetingkap"
     },
     "fil": {
@@ -1965,7 +1965,7 @@
         "accent": "Kulay ng diin",
         "reducedMotion": "Bawasan ang galaw",
         "sharpen": "Bahagyang pagtalas",
-        "sharpenHint": "Bahagyang pagtalas sa device na ito. Hindi ito pagpapalaki gamit ang AI.",
+        "sharpenHint": "Bahagyang pinapatampok ang mga gilid sa device na ito.",
         "visibleModes": "Mga paraang makikita sa window"
     },
     "bn": {
@@ -2025,7 +2025,7 @@
         "accent": "জোরের রং",
         "reducedMotion": "গতি কমান",
         "sharpen": "হালকা স্পষ্টতা",
-        "sharpenHint": "এই ডিভাইসে হালকা স্পষ্টতা। এটি AI দিয়ে বড় করা নয়।",
+        "sharpenHint": "এই ডিভাইসে কিনারা একটু স্পষ্ট করে।",
         "visibleModes": "উইন্ডোতে দেখা ধরন"
     },
     "ca": {
@@ -2085,7 +2085,7 @@
         "accent": "Color d'accent",
         "reducedMotion": "Redueix el moviment",
         "sharpen": "Nitidesa lleugera",
-        "sharpenHint": "Una nitidesa lleugera en aquest aparell. No és un escalat amb IA.",
+        "sharpenHint": "Ressalta una mica les vores en aquest aparell.",
         "visibleModes": "Modes visibles a la finestra"
     },
     "sk": {
@@ -2145,7 +2145,7 @@
         "accent": "Farba zvýraznenia",
         "reducedMotion": "Obmedziť pohyb",
         "sharpen": "Mierne zaostrenie",
-        "sharpenHint": "Mierne zaostrenie na tomto zariadení. Nie je to zväčšenie pomocou AI.",
+        "sharpenHint": "Na tomto zariadení mierne zvýrazní okraje.",
         "visibleModes": "Režimy v okne"
     },
     "hr": {
@@ -2205,7 +2205,7 @@
         "accent": "Boja naglaska",
         "reducedMotion": "Smanji gibanje",
         "sharpen": "Blago izoštravanje",
-        "sharpenHint": "Blago izoštravanje na ovom uređaju. To nije povećanje pomoću AI-ja.",
+        "sharpenHint": "Blago ističe rubove na ovom uređaju.",
         "visibleModes": "Načini prikazani u prozoru"
     },
     "bg": {
@@ -2265,7 +2265,7 @@
         "accent": "Акцентен цвят",
         "reducedMotion": "По-малко движение",
         "sharpen": "Леко изостряне",
-        "sharpenHint": "Леко изостряне на това устройство. Това не е увеличение с изкуствен интелект.",
+        "sharpenHint": "Леко подчертава ръбовете на това устройство.",
         "visibleModes": "Режими в прозореца"
     },
     "sr": {
@@ -2325,7 +2325,7 @@
         "accent": "Боја нагласка",
         "reducedMotion": "Смањи покрет",
         "sharpen": "Благо изоштравање",
-        "sharpenHint": "Благо изоштравање на овом уређају. То није увећање помоћу вештачке интелигенције.",
+        "sharpenHint": "Благо истиче ивице на овом уређају.",
         "visibleModes": "Режими приказани у прозору"
     },
     "lt": {
@@ -2385,7 +2385,7 @@
         "accent": "Akcento spalva",
         "reducedMotion": "Mažiau judesio",
         "sharpen": "Lengvas aštrinimas",
-        "sharpenHint": "Lengvas aštrinimas šiame įrenginyje. Tai nėra didinimas dirbtiniu intelektu.",
+        "sharpenHint": "Šiame įrenginyje šiek tiek paryškina kraštus.",
         "visibleModes": "Režimai, rodomi lange"
     },
     "sl": {
@@ -2445,7 +2445,7 @@
         "accent": "Barva poudarka",
         "reducedMotion": "Zmanjšaj gibanje",
         "sharpen": "Rahlo izostritev",
-        "sharpenHint": "Rahla izostritev na tej napravi. To ni povečava z umetno inteligenco.",
+        "sharpenHint": "Na tej napravi rahlo poudari robove.",
         "visibleModes": "Načini, prikazani v oknu"
     },
     "et": {
@@ -2505,7 +2505,7 @@
         "accent": "Aktsentvärv",
         "reducedMotion": "Vähenda liikumist",
         "sharpen": "Kerge teravus",
-        "sharpenHint": "Kerge teravus selles seadmes. See ei ole tehisintellekti suurendus.",
+        "sharpenHint": "Tõstab sellel seadmel servi kergelt esile.",
         "visibleModes": "Aknas näidatavad režiimid"
     },
     "lv": {
@@ -2565,7 +2565,7 @@
         "accent": "Akcenta krāsa",
         "reducedMotion": "Mazāk kustības",
         "sharpen": "Viegla asuma palielināšana",
-        "sharpenHint": "Viegla asuma palielināšana šajā ierīcē. Tas nav palielinājums ar mākslīgo intelektu.",
+        "sharpenHint": "Šajā ierīcē nedaudz izceļ malas.",
         "visibleModes": "Logā redzamie režīmi"
     },
     "fa": {
@@ -2625,7 +2625,7 @@
         "accent": "رنگ تأکید",
         "reducedMotion": "کاهش حرکت",
         "sharpen": "وضوح ملایم",
-        "sharpenHint": "وضوح ملایم روی همین دستگاه. این بزرگ‌نمایی با هوش مصنوعی نیست.",
+        "sharpenHint": "لبه‌ها را روی همین دستگاه کمی واضح‌تر می‌کند.",
         "visibleModes": "حالت‌های نمایان در پنجره"
     },
     "sw": {
@@ -2685,7 +2685,7 @@
         "accent": "Rangi ya msisitizo",
         "reducedMotion": "Punguza mwendo",
         "sharpen": "Unoaji kidogo",
-        "sharpenHint": "Unoaji kidogo kwenye kifaa hiki. Hii si kukuza kwa AI.",
+        "sharpenHint": "Huongeza ukali kidogo kwenye kifaa hiki.",
         "visibleModes": "Hali zinazoonekana kwenye dirisha"
     }
 };
