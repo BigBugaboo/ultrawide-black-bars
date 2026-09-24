@@ -234,6 +234,20 @@ button.active {
   font-size: 12px;
 }
 
+body.welcome.settings input[type="color"] {
+  width: 100%;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid var(--ubb-border);
+  border-radius: 8px;
+  background: var(--ubb-button);
+}
+
+body.welcome.settings #bar-color-group {
+  margin-top: 8px;
+}
+
 body.welcome select,
 body.welcome.settings input[type="time"] {
   width: 100%;

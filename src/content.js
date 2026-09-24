@@ -8,6 +8,7 @@
   var locale = "en";
   var ambientBlur = "medium";
   var musicStyle = "bars";
+  var barColor = "#ffd60a";
   var hiddenModes = [];
   var sharpen = false;
   var reducedMotion = false;
@@ -71,6 +72,7 @@
     locale = next.locale;
     ambientBlur = next.ambientBlur;
     musicStyle = next.musicStyle || "bars";
+    barColor = next.barColor || "#ffd60a";
     hiddenModes = next.hiddenModes || [];
     sharpen = !!next.sharpen;
     reducedMotion = !!next.reducedMotion;
@@ -425,6 +427,16 @@
     ctx.closePath();
   }
 
+  function barRgb(hex) {
+    var match = /^#([0-9a-f]{6})$/i.exec(hex || "");
+    var n = match ? parseInt(match[1], 16) : 0xffd60a;
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+
+  function mixWhite(channel, amount) {
+    return Math.round(channel + (255 - channel) * amount);
+  }
+
   function drawChannel(canvas, levels, width, height, reverse) {
     var w = width > 4 ? width : canvas.clientWidth || 48;
     var h = height > 4 ? height : canvas.clientHeight || 180;
@@ -447,10 +459,11 @@
       var lit = Math.max(h * 0.06, Math.min(h * 0.96, amp * h * 0.92));
       var x = i * colW;
       var y = h - lit;
+      var rgb = barRgb(barColor);
       var glow = ctx.createLinearGradient(0, h, 0, y);
-      glow.addColorStop(0, "rgba(255, 214, 10, 0.9)");
-      glow.addColorStop(0.45, "rgba(255, 186, 0, 0.55)");
-      glow.addColorStop(1, "rgba(255, 170, 0, 0)");
+      glow.addColorStop(0, "rgba(" + mixWhite(rgb.r, 0.35) + "," + mixWhite(rgb.g, 0.35) + "," + mixWhite(rgb.b, 0.35) + ",0.92)");
+      glow.addColorStop(0.45, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.62)");
+      glow.addColorStop(1, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0)");
       ctx.fillStyle = glow;
       ctx.fillRect(x, y, colW + 0.5, lit);
     }
@@ -961,7 +974,7 @@
   if (globalThis.chrome && chrome.storage && chrome.storage.onChanged) {
     chrome.storage.onChanged.addListener(function (changes, areaName) {
       if (areaName !== "local") return;
-      var watch = ["mode", "enabled", "locale", "ambientBlur", "musicStyle", "sitePrefs", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
+      var watch = ["mode", "enabled", "locale", "ambientBlur", "musicStyle", "barColor", "sitePrefs", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
       var relevant = false;
       for (var i = 0; i < watch.length; i++) if (changes[watch[i]]) relevant = true;
       if (!relevant) return;

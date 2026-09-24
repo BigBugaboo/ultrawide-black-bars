@@ -54,6 +54,13 @@
     return value === false || value === "false" || value === 0;
   }
 
+  function normalizeBarColor(value) {
+    if (typeof value !== "string") return "#ffd60a";
+    var match = /^#([0-9a-fA-F]{6})$/.exec(value);
+    if (!match) return "#ffd60a";
+    return "#" + match[1].toLowerCase();
+  }
+
   function normalizeMusicStyle(value) {
     if (value === "bars" || value === "drops" || value === "breath") return value;
     return "bars";
@@ -217,6 +224,7 @@
       locale: normalizeLocale(raw.locale),
       ambientBlur: normalizeBlur(raw.ambientBlur),
       musicStyle: normalizeMusicStyle(raw.musicStyle),
+      barColor: normalizeBarColor(raw.barColor),
       welcomeAck: raw.welcomeAck === true,
       dropEnabled: dropEnabled,
       theme: normalizeTheme(raw.theme),

@@ -2,6 +2,7 @@ var locale = "en";
 var mode = "ambient";
 var ambientBlur = "medium";
 var musicStyle = "bars";
+var barColor = "#ffd60a";
 var panel = "mode";
 var theme = "dark";
 var themeLightStart = "07:00";
@@ -21,6 +22,9 @@ var blurButtons = document.querySelectorAll("#blur button");
 var musicStyleGroup = document.querySelector("#music-style-group");
 var musicStyleLabel = document.querySelector("#music-style-label");
 var musicStyleButtons = document.querySelectorAll("#music-styles button");
+var barColorGroup = document.querySelector("#bar-color-group");
+var barColorLabel = document.querySelector("#bar-color-label");
+var barColorInput = document.querySelector("#bar-color");
 var languageButtons = document.querySelectorAll("#languages button");
 var languageSearch = document.querySelector("#language-search");
 var languageEmpty = document.querySelector("#language-empty");
@@ -135,6 +139,9 @@ function render() {
     button.textContent = t(key);
     button.classList.toggle("active", name === musicStyle);
   });
+  if (barColorGroup) barColorGroup.hidden = mode !== "music" || musicStyle !== "bars";
+  if (barColorLabel) barColorLabel.textContent = t("barColor");
+  if (barColorInput && document.activeElement !== barColorInput) barColorInput.value = barColor;
   blurLabel.textContent = t("blur");
   blurButtons.forEach(function (button) {
     var name = button.dataset.blur;
@@ -269,6 +276,13 @@ musicStyleButtons.forEach(function (button) {
     render();
   });
 });
+
+if (barColorInput) {
+  barColorInput.addEventListener("input", function () {
+    barColor = UbbSettings.normalizeSettings({ barColor: barColorInput.value }).barColor;
+    persist({ barColor: barColor });
+  });
+}
 
 languageButtons.forEach(function (button) {
   button.addEventListener("click", function () {
@@ -405,6 +419,7 @@ chrome.storage.local.get(null, function (items) {
   mode = settings.mode;
   ambientBlur = settings.ambientBlur;
   musicStyle = settings.musicStyle;
+  barColor = settings.barColor;
   theme = settings.theme;
   themeLightStart = settings.themeLightStart;
   themeLightEnd = settings.themeLightEnd;
