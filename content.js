@@ -173,7 +173,7 @@
   }
 
   function ensureAmbient(wrapper, video) {
-    if (state.wrapper === wrapper && state.video === video && state.ambient) {
+    if (state.wrapper === wrapper && state.ambient) {
       return;
     }
 
@@ -213,8 +213,8 @@
     state.ambient = ambient;
 
     state.syncPlayback = () => playAmbientVideos();
-    state.video.addEventListener('play', state.syncPlayback);
-    state.video.addEventListener('loadeddata', state.syncPlayback);
+    video.addEventListener('play', state.syncPlayback);
+    video.addEventListener('loadeddata', state.syncPlayback);
   }
 
   function ensureToast() {
@@ -259,6 +259,10 @@
     }
 
     if (state.video !== video) {
+      if (state.ambient) {
+        releaseAmbient();
+      }
+
       releaseVideoState();
       state.video = video;
 
