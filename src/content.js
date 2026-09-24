@@ -9,6 +9,7 @@
   var ambientBlur = "medium";
   var musicStyle = "bars";
   var barColor = "#ffd60a";
+  var barPalette = "solid";
   var hiddenModes = [];
   var sharpen = false;
   var reducedMotion = false;
@@ -73,6 +74,7 @@
     ambientBlur = next.ambientBlur;
     musicStyle = next.musicStyle || "bars";
     barColor = next.barColor || "#ffd60a";
+    barPalette = next.barPalette === "rainbow" ? "rainbow" : "solid";
     hiddenModes = next.hiddenModes || [];
     sharpen = !!next.sharpen;
     reducedMotion = !!next.reducedMotion;
@@ -427,6 +429,30 @@
     ctx.closePath();
   }
 
+  function pastelRgb(hue) {
+    var h = ((hue % 360) + 360) % 360;
+    var s = 0.45;
+    var l = 0.78;
+    var c = (1 - Math.abs(2 * l - 1)) * s;
+    var hp = h / 60;
+    var x = c * (1 - Math.abs((hp % 2) - 1));
+    var r = 0;
+    var g = 0;
+    var b = 0;
+    if (hp < 1) { r = c; g = x; }
+    else if (hp < 2) { r = x; g = c; }
+    else if (hp < 3) { g = c; b = x; }
+    else if (hp < 4) { g = x; b = c; }
+    else if (hp < 5) { r = x; b = c; }
+    else { r = c; b = x; }
+    var m = l - c / 2;
+    return {
+      r: Math.round((r + m) * 255),
+      g: Math.round((g + m) * 255),
+      b: Math.round((b + m) * 255),
+    };
+  }
+
   function barRgb(hex) {
     var match = /^#([0-9a-f]{6})$/i.exec(hex || "");
     var n = match ? parseInt(match[1], 16) : 0xffd60a;
@@ -459,7 +485,7 @@
       var lit = Math.max(h * 0.06, Math.min(h * 0.96, amp * h * 0.92));
       var x = i * colW;
       var y = h - lit;
-      var rgb = barRgb(barColor);
+      var rgb = barPalette === "rainbow" ? pastelRgb((i / n) * 360) : barRgb(barColor);
       var glow = ctx.createLinearGradient(0, h, 0, y);
       glow.addColorStop(0, "rgba(" + mixWhite(rgb.r, 0.35) + "," + mixWhite(rgb.g, 0.35) + "," + mixWhite(rgb.b, 0.35) + ",0.92)");
       glow.addColorStop(0.45, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.62)");
@@ -974,7 +1000,7 @@
   if (globalThis.chrome && chrome.storage && chrome.storage.onChanged) {
     chrome.storage.onChanged.addListener(function (changes, areaName) {
       if (areaName !== "local") return;
-      var watch = ["mode", "enabled", "locale", "ambientBlur", "musicStyle", "barColor", "sitePrefs", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
+      var watch = ["mode", "enabled", "locale", "ambientBlur", "musicStyle", "barColor", "barPalette", "sitePrefs", "pageMemory", "hiddenModes", "sharpen", "reducedMotion"];
       var relevant = false;
       for (var i = 0; i < watch.length; i++) if (changes[watch[i]]) relevant = true;
       if (!relevant) return;

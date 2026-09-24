@@ -54,6 +54,11 @@
     return value === false || value === "false" || value === 0;
   }
 
+  function normalizeBarPalette(value) {
+    if (value === "solid" || value === "rainbow") return value;
+    return "solid";
+  }
+
   function normalizeBarColor(value) {
     if (typeof value !== "string") return "#ffd60a";
     var match = /^#([0-9a-fA-F]{6})$/.exec(value);
@@ -225,6 +230,7 @@
       ambientBlur: normalizeBlur(raw.ambientBlur),
       musicStyle: normalizeMusicStyle(raw.musicStyle),
       barColor: normalizeBarColor(raw.barColor),
+      barPalette: normalizeBarPalette(raw.barPalette),
       welcomeAck: raw.welcomeAck === true,
       dropEnabled: dropEnabled,
       theme: normalizeTheme(raw.theme),

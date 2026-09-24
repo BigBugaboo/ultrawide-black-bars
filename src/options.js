@@ -3,6 +3,7 @@ var mode = "ambient";
 var ambientBlur = "medium";
 var musicStyle = "bars";
 var barColor = "#ffd60a";
+var barPalette = "solid";
 var panel = "mode";
 var theme = "dark";
 var themeLightStart = "07:00";
@@ -25,6 +26,7 @@ var musicStyleButtons = document.querySelectorAll("#music-styles button");
 var barColorGroup = document.querySelector("#bar-color-group");
 var barColorLabel = document.querySelector("#bar-color-label");
 var barColorInput = document.querySelector("#bar-color");
+var barRainbow = document.querySelector("#bar-rainbow");
 var languageButtons = document.querySelectorAll("#languages button");
 var languageSearch = document.querySelector("#language-search");
 var languageEmpty = document.querySelector("#language-empty");
@@ -142,6 +144,10 @@ function render() {
   if (barColorGroup) barColorGroup.hidden = mode !== "music" || musicStyle !== "bars";
   if (barColorLabel) barColorLabel.textContent = t("barColor");
   if (barColorInput && document.activeElement !== barColorInput) barColorInput.value = barColor;
+  if (barRainbow) {
+    barRainbow.textContent = t("barRainbow");
+    barRainbow.classList.toggle("active", barPalette === "rainbow");
+  }
   blurLabel.textContent = t("blur");
   blurButtons.forEach(function (button) {
     var name = button.dataset.blur;
@@ -280,7 +286,17 @@ musicStyleButtons.forEach(function (button) {
 if (barColorInput) {
   barColorInput.addEventListener("input", function () {
     barColor = UbbSettings.normalizeSettings({ barColor: barColorInput.value }).barColor;
-    persist({ barColor: barColor });
+    barPalette = "solid";
+    persist({ barColor: barColor, barPalette: barPalette });
+    render();
+  });
+}
+
+if (barRainbow) {
+  barRainbow.addEventListener("click", function () {
+    barPalette = "rainbow";
+    persist({ barPalette: barPalette });
+    render();
   });
 }
 
@@ -420,6 +436,7 @@ chrome.storage.local.get(null, function (items) {
   ambientBlur = settings.ambientBlur;
   musicStyle = settings.musicStyle;
   barColor = settings.barColor;
+  barPalette = settings.barPalette;
   theme = settings.theme;
   themeLightStart = settings.themeLightStart;
   themeLightEnd = settings.themeLightEnd;

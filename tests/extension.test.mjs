@@ -85,6 +85,8 @@ assert.equal(settings.normalizeSettings({ musicStyle: "nope" }).musicStyle, "bar
 assert.equal(settings.normalizeSettings({}).barColor, "#ffd60a");
 assert.equal(settings.normalizeSettings({ barColor: "#00FF00" }).barColor, "#00ff00");
 assert.equal(settings.normalizeSettings({ barColor: "red" }).barColor, "#ffd60a");
+assert.equal(settings.normalizeSettings({}).barPalette, "solid");
+assert.equal(settings.normalizeSettings({ barPalette: "rainbow" }).barPalette, "rainbow");
 var hiddenAll = settings.normalizeSettings({ hiddenModes: ["original", "ambient", "music", "crop"] }).hiddenModes;
 assert.ok(hiddenAll.indexOf("original") < 0);
 assert.ok(hiddenAll.length < 4);
