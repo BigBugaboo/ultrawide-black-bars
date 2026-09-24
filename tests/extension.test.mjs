@@ -169,7 +169,7 @@ assert.match(content, /if\s*\(\s*!enabled\s*\)/);
 assert.match(content, /ubb-fill/);
 const contentCss = readFileSync(new URL("../src/content.css", import.meta.url), "utf8");
 assert.match(contentCss, /#movie_player\.ubb-fill video\.html5-main-video[\s\S]*object-fit:\s*cover/);
-assert.match(contentCss, /left:\s*0 !important/);
+assert.match(contentCss, /bottom:\s*0 !important/);
 
 const background = readFileSync(new URL("../src/background.js", import.meta.url), "utf8");
 assert.doesNotMatch(background, /importScripts/);
