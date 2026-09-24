@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Bỏ thanh đen hai bên của video 16:9 trên màn hình ultrawide."
+  },
+  "commandCycle": {
+    "message": "Chuyển vòng giữa gốc, môi trường và phủ kín"
+  }
+}

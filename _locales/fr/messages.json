@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Supprime les bandes noires latérales des vidéos 16:9 sur les écrans ultrawide."
+  },
+  "commandCycle": {
+    "message": "Faire défiler original, ambiance et remplir"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Убирает боковые чёрные полосы у видео 16:9 на ультрашироких экранах."
+  },
+  "commandCycle": {
+    "message": "Переключать исходный, окружение и заполнение"
+  }
+}

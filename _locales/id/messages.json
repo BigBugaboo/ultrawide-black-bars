@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "Menghilangkan bilah hitam di kedua sisi video 16:9 pada layar ultrawide."
+  },
+  "commandCycle": {
+    "message": "Menggilir asli, suasana, dan isi penuh"
+  }
+}

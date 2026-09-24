@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "울트라와이드 화면에서 16:9 동영상의 좌우 검은 여백을 없앱니다."
+  },
+  "commandCycle": {
+    "message": "원본, 앰비언트, 채우기를 순환"
+  }
+}

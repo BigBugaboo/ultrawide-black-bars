@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Ultrawide Black Bars"
+  },
+  "extDescription": {
+    "message": "在带鱼屏上去掉 16:9 网页视频两侧的黑边。"
+  },
+  "commandCycle": {
+    "message": "在原比例、环境光和铺满之间切换"
+  }
+}
