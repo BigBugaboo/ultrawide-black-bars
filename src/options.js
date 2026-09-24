@@ -24,7 +24,8 @@ var musicStyleGroup = document.querySelector("#music-style-group");
 var musicStyleLabel = document.querySelector("#music-style-label");
 var musicStyleButtons = document.querySelectorAll("#music-styles button");
 var barColorGroup = document.querySelector("#bar-color-group");
-var barColorLabel = document.querySelector("#bar-color-label");
+var barCustomLabel = document.querySelector("#bar-custom-label");
+var barPresetLabel = document.querySelector("#bar-preset-label");
 var barColorInput = document.querySelector("#bar-color");
 var barRainbow = document.querySelector("#bar-rainbow");
 var languageButtons = document.querySelectorAll("#languages button");
@@ -142,7 +143,8 @@ function render() {
     button.classList.toggle("active", name === musicStyle);
   });
   if (barColorGroup) barColorGroup.hidden = mode !== "music" || musicStyle !== "bars";
-  if (barColorLabel) barColorLabel.textContent = t("barColor");
+  if (barCustomLabel) barCustomLabel.textContent = t("barCustom");
+  if (barPresetLabel) barPresetLabel.textContent = t("barPreset");
   if (barColorInput && document.activeElement !== barColorInput) barColorInput.value = barColor;
   if (barRainbow) {
     barRainbow.textContent = t("barRainbow");

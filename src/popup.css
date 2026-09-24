@@ -248,6 +248,10 @@ body.welcome.settings #bar-color-group {
   margin-top: 8px;
 }
 
+body.welcome.settings #bar-preset-label {
+  margin-top: 12px;
+}
+
 body.welcome select,
 body.welcome.settings input[type="time"] {
   width: 100%;
