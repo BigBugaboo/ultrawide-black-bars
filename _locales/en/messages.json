@@ -3,7 +3,7 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "Remove side black bars on ultrawide screens for 16:9 video."
+    "message": "Remove black bars around web video with fill, ambient, or music modes."
   },
   "commandCycle": {
     "message": "Cycle original, ambient, music, and fill"

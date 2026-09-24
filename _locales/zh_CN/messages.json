@@ -3,9 +3,9 @@
     "message": "Ultrawide Black Bars"
   },
   "extDescription": {
-    "message": "在带鱼屏上为 16:9 视频去掉两侧黑边。"
+    "message": "去掉网页视频周围的黑边，可用铺满、环境光或音乐模式。"
   },
   "commandCycle": {
-    "message": "在原比例、环境光、铺满和拉伸之间循环"
+    "message": "在原比例、环境光、音乐和铺满之间循环"
   }
 }
