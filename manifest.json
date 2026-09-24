@@ -7,8 +7,7 @@
     "storage"
   ],
   "host_permissions": [
-    "https://*.bilibili.com/video/*",
-    "https://b23.tv/*"
+    "https://*.bilibili.com/video/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -28,8 +27,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.bilibili.com/video/*",
-        "https://b23.tv/*"
+        "https://*.bilibili.com/video/*"
       ],
       "js": [
         "content.js"
