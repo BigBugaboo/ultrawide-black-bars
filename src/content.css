@@ -1,0 +1,121 @@
+.bpx-player-video-area.ubb-crop,
+.ubb-player.ubb-crop,
+.bpx-player-video-area.ubb-zoom,
+.ubb-player.ubb-zoom {
+  overflow: hidden;
+}
+
+.bpx-player-video-area.ubb-crop .bpx-player-video-perch,
+.bpx-player-video-area.ubb-crop .bpx-player-render-dm-wrap,
+.bpx-player-video-area.ubb-crop .bpx-player-subtitle-wrap,
+.bpx-player-video-area.ubb-zoom .bpx-player-video-perch,
+.bpx-player-video-area.ubb-zoom .bpx-player-render-dm-wrap,
+.bpx-player-video-area.ubb-zoom .bpx-player-subtitle-wrap {
+  transform: translate(var(--ubb-pan-x, 0px), var(--ubb-pan-y, 0px)) scale(calc(var(--ubb-scale, 1) * var(--ubb-user-scale, 1)));
+  transform-origin: var(--ubb-origin-x, 50%) var(--ubb-origin-y, 50%);
+}
+
+.ubb-player.ubb-crop .ubb-scale-target,
+.ubb-player.ubb-zoom .ubb-scale-target {
+  transform: translate(var(--ubb-pan-x, 0px), var(--ubb-pan-y, 0px)) scale(calc(var(--ubb-scale, 1) * var(--ubb-user-scale, 1)));
+  transform-origin: var(--ubb-origin-x, 50%) var(--ubb-origin-y, 50%);
+}
+
+.bpx-player-video-area {
+  position: relative;
+}
+
+.ubb-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bpx-player-video-area.ubb-ambient .ubb-bar,
+.ubb-player.ubb-ambient .ubb-bar {
+  display: block;
+}
+
+.ubb-bar-left {
+  left: 0;
+}
+
+.ubb-bar-right {
+  right: 0;
+}
+
+.ubb-bar-top,
+.ubb-bar-bottom {
+  left: 0;
+  right: 0;
+  width: auto;
+}
+
+.ubb-bar-top {
+  top: 0;
+  bottom: auto;
+}
+
+.ubb-bar-bottom {
+  top: auto;
+  bottom: 0;
+}
+
+.ubb-bar-top,
+.ubb-bar-bottom {
+  left: 0;
+  right: 0;
+  width: auto;
+  bottom: auto;
+}
+
+.ubb-bar-top {
+  top: 0;
+}
+
+.ubb-bar-bottom {
+  top: auto;
+  bottom: 0;
+}
+
+.ubb-bar canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: blur(var(--ubb-blur, 20px));
+  transform: scale(1.12);
+}
+
+.ubb-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  transform: translateX(-50%);
+  z-index: 30;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font: 600 14px/1.2 sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.ubb-toast.ubb-toast-on {
+  opacity: 1;
+}
+
+.ubb-toast.ubb-still {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ubb-toast {
+    transition: none;
+  }
+}

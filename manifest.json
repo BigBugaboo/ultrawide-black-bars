@@ -1,0 +1,73 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "version": "0.1.0",
+  "default_locale": "en",
+  "description": "__MSG_extDescription__",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "options_ui": {
+    "page": "src/options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "__MSG_extName__",
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "16": "icons/wave16.png",
+      "48": "icons/wave48.png",
+      "128": "icons/wave128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/wave16.png",
+    "48": "icons/wave48.png",
+    "128": "icons/wave128.png"
+  },
+  "commands": {
+    "cycle-mode": {
+      "suggested_key": {
+        "default": "Alt+Shift+U",
+        "mac": "Alt+Shift+U"
+      },
+      "description": "__MSG_commandCycle__"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/video/*",
+        "https://www.bilibili.com/bangumi/play/*",
+        "https://www.bilibili.com/list/*",
+        "https://www.youtube.com/watch*",
+        "https://www.youtube.com/watch?*",
+        "https://www.youtube.com/shorts/*",
+        "https://www.twitch.tv/videos/*",
+        "https://www.netflix.com/watch/*",
+        "https://netflix.com/watch/*",
+        "https://www.primevideo.com/gp/video/detail/*",
+        "https://www.primevideo.com/detail/*",
+        "https://www.primevideo.com/region/*/detail/*",
+        "https://www.primevideo.com/region/*/gp/video/detail/*",
+        "https://primevideo.com/gp/video/detail/*",
+        "https://primevideo.com/detail/*",
+        "https://www.disneyplus.com/play/*",
+        "https://www.disneyplus.com/video/*",
+        "https://disneyplus.com/play/*",
+        "https://disneyplus.com/video/*",
+        "https://play.max.com/video/watch/*"
+      ],
+      "js": [
+        "src/i18n.js",
+        "src/settings.js",
+        "src/sites.js",
+        "src/layout.js",
+        "src/content.js"
+      ],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
