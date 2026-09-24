@@ -92,10 +92,9 @@ assert.equal(settings.normalizeSettings({ barPalette: "flow" }).barPalette, "flo
 var hiddenAll = settings.normalizeSettings({ hiddenModes: ["original", "ambient", "music", "crop"] }).hiddenModes;
 assert.ok(hiddenAll.indexOf("original") < 0);
 assert.ok(hiddenAll.length < 4);
-assert.equal(defaults.dropEnabled, false);
-assert.equal(Object.prototype.hasOwnProperty.call(defaults, "enabled"), false);
-assert.equal(settings.normalizeSettings({ enabled: false, mode: "ambient" }).mode, "original");
-assert.equal(settings.normalizeSettings({ enabled: false, mode: "crop" }).dropEnabled, true);
+assert.equal(defaults.enabled, true);
+assert.equal(settings.normalizeSettings({ enabled: false, mode: "ambient" }).enabled, false);
+assert.equal(settings.normalizeSettings({ enabled: false, mode: "ambient" }).mode, "ambient");
 assert.equal(settings.normalizeSettings({ enabled: true, mode: "crop" }).mode, "crop");
 for (const locale of i18n.LOCALES) {
   assert.ok(i18n.translate(locale, "settings").length > 0);
@@ -166,7 +165,7 @@ assert.doesNotMatch(content, /document\.addEventListener\(\s*"contextmenu"/);
 assert.match(content, /sitePrefs/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbient/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbientFrame/);
-assert.doesNotMatch(content, /if\s*\(\s*!enabled\s*\)/);
+assert.match(content, /if\s*\(\s*!enabled\s*\)/);
 
 const background = readFileSync(new URL("../src/background.js", import.meta.url), "utf8");
 assert.doesNotMatch(background, /importScripts/);
@@ -189,7 +188,7 @@ assert.equal(manifest.options_ui.page, "src/options.html");
 assert.equal(manifest.options_ui.open_in_tab, true);
 
 const popupHtml = readFileSync(new URL("../src/popup.html", import.meta.url), "utf8");
-assert.doesNotMatch(popupHtml, /id="enabled"/);
+assert.match(popupHtml, /id="enabled"/);
 assert.doesNotMatch(popupHtml, /<select/);
 assert.match(popupHtml, /id="lang-toggle"/);
 assert.match(popupHtml, /id="open-settings"/);
@@ -384,7 +383,7 @@ const popupSandbox = {
   },
   UbbSettings: {
     normalizeSettings() {
-      return { locale: "en", mode: "ambient", dropEnabled: false };
+      return { locale: "en", mode: "ambient", enabled: true };
     },
   },
 };

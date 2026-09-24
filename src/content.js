@@ -4,6 +4,7 @@
   var sitesApi = globalThis.UbbSites;
   var i18n = globalThis.UbbI18n;
 
+  var enabled = true;
   var mode = "ambient";
   var locale = "en";
   var ambientBlur = "medium";
@@ -71,6 +72,7 @@
   }
 
   function applyStored(next) {
+    enabled = next.enabled !== false;
     locale = next.locale;
     ambientBlur = next.ambientBlur;
     musicStyle = next.musicStyle || "bars";
@@ -89,13 +91,6 @@
     zoom = settingsApi.normalizeZoom(zoomSrc.userScale != null ? zoomSrc.userScale : zoomSrc.zoom);
     panX = settingsApi.normalizePan(zoomSrc.panX);
     panY = settingsApi.normalizePan(zoomSrc.panY);
-    if (next.dropEnabled) {
-      var storage = globalThis.chrome && chrome.storage && chrome.storage.local;
-      if (storage) {
-        storage.set({ mode: "original" });
-        storage.remove("enabled");
-      }
-    }
   }
 
   function scheduleSave() {
@@ -771,7 +766,26 @@
     }
   }
 
+  function turnOff() {
+    stopAmbientLoop();
+    if (video) video.classList.remove("ubb-sharpen");
+    if (resizeObserver) resizeObserver.disconnect();
+    observedArea = null;
+    if (area) {
+      clearEffects();
+      releaseArea(area);
+    }
+    area = null;
+    leftBar = null;
+    toast = null;
+    sideChrome = "";
+  }
+
   function syncAmbient() {
+    if (!enabled) {
+      stopAmbientLoop();
+      return;
+    }
     if (!layout.shouldRunAmbientLoop(loopState())) {
       stopAmbientLoop();
       if (mode === "ambient") paintAmbientFrame();
@@ -915,6 +929,10 @@
   }
 
   function apply() {
+    if (!enabled) {
+      turnOff();
+      return;
+    }
     site = sitesApi.resolve(location);
     if (!site) return;
     var nextArea = site.findArea(document);

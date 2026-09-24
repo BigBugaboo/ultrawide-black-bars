@@ -447,10 +447,6 @@ chrome.storage.local.get(null, function (items) {
   accent = settings.accent || "cyan";
   reducedMotion = !!settings.reducedMotion;
   sharpen = !!settings.sharpen;
-  if (settings.dropEnabled) {
-    persist({ mode: "original" });
-    chrome.storage.local.remove("enabled");
-  }
   render();
   if (chrome.commands && chrome.commands.getAll) {
     UbbShortcuts.readShortcut(chrome.commands, function (shortcut) {

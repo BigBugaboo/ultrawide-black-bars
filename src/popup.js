@@ -1,10 +1,14 @@
 var locale = "en";
+var enabled = true;
 var mode = "ambient";
 var ambientBlur = "medium";
 var musicStyle = "bars";
 var hiddenModes = [];
 
 var tagline = document.querySelector("#tagline");
+var modes = document.querySelector("#modes");
+var enabledInput = document.querySelector("#enabled");
+var enabledLabel = document.querySelector("#enabled-label");
 var modeButtons = document.querySelectorAll("#modes > button[data-mode]");
 var blurGroup = document.querySelector("#blur-group");
 var blurLabel = document.querySelector("#blur-label");
@@ -28,6 +32,12 @@ function t(key) {
 function render() {
   document.documentElement.lang = UbbI18n.htmlLang(locale);
   if (tagline) tagline.textContent = t("tagline");
+  if (enabledLabel) enabledLabel.textContent = t("enabled");
+  if (enabledInput) {
+    enabledInput.checked = enabled;
+    enabledInput.setAttribute("aria-checked", enabled ? "true" : "false");
+  }
+  if (modes) modes.classList.toggle("is-off", !enabled);
   if (langToggle) langToggle.textContent = UbbI18n.localeName ? UbbI18n.localeName(locale) : locale;
   modeButtons.forEach(function (button) {
     var name = button.dataset.mode;
@@ -149,6 +159,14 @@ langOptions.forEach(function (button) {
 
 document.addEventListener("click", closeLang);
 
+if (enabledInput) {
+  enabledInput.addEventListener("change", function () {
+    enabled = enabledInput.checked;
+    persist({ enabled: enabled });
+    render();
+  });
+}
+
 modeButtons.forEach(function (button) {
   button.addEventListener("click", function () {
     mode = button.dataset.mode;
@@ -178,14 +196,11 @@ bindOpenSettings(openSettings);
 chrome.storage.local.get(null, function (items) {
   var settings = UbbSettings.normalizeSettings(items);
   locale = settings.locale;
+  enabled = settings.enabled !== false;
   mode = settings.mode;
   ambientBlur = settings.ambientBlur;
   musicStyle = settings.musicStyle;
   hiddenModes = settings.hiddenModes || [];
-  if (settings.dropEnabled) {
-    persist({ mode: "original" });
-    chrome.storage.local.remove("enabled");
-  }
   render();
 });
 

@@ -50,10 +50,6 @@
     return "ambient";
   }
 
-  function legacyEnabledOff(value) {
-    return value === false || value === "false" || value === 0;
-  }
-
   function normalizeBarPalette(value) {
     if (value === "solid" || value === "rainbow" || value === "classic" || value === "flow") return value;
     return "solid";
@@ -223,16 +219,15 @@
 
   function normalizeSettings(raw) {
     raw = raw || {};
-    var dropEnabled = legacyEnabledOff(raw.enabled);
     return {
-      mode: dropEnabled ? "original" : normalizeMode(raw.mode),
+      enabled: raw.enabled !== false,
+      mode: normalizeMode(raw.mode),
       locale: normalizeLocale(raw.locale),
       ambientBlur: normalizeBlur(raw.ambientBlur),
       musicStyle: normalizeMusicStyle(raw.musicStyle),
       barColor: normalizeBarColor(raw.barColor),
       barPalette: normalizeBarPalette(raw.barPalette),
       welcomeAck: raw.welcomeAck === true,
-      dropEnabled: dropEnabled,
       theme: normalizeTheme(raw.theme),
       themeLightStart: normalizeClock(raw.themeLightStart, "07:00"),
       themeLightEnd: normalizeClock(raw.themeLightEnd, "19:00"),

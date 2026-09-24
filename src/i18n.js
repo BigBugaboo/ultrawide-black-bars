@@ -50,6 +50,7 @@
   var MESSAGES = {
     "en": {
         "tagline": "Remove side black bars on ultrawide screens",
+        "enabled": "Enabled",
         "modeLabel": "Mode",
         "settings": "Settings",
         "feedback": "Report a problem",
@@ -111,6 +112,7 @@
     },
     "zh_CN": {
         "tagline": "在带鱼屏上去掉视频两侧黑边",
+        "enabled": "启用",
         "modeLabel": "模式",
         "settings": "设置",
         "feedback": "反馈问题",
@@ -172,6 +174,7 @@
     },
     "zh_TW": {
         "tagline": "在超寬螢幕上去掉影片兩側黑邊",
+        "enabled": "啟用",
         "modeLabel": "模式",
         "settings": "設定",
         "feedback": "回報問題",
@@ -233,6 +236,7 @@
     },
     "ja": {
         "tagline": "ウルトラワイド画面の左右の黒帯を消します",
+        "enabled": "有効",
         "modeLabel": "モード",
         "settings": "設定",
         "feedback": "問題を報告",
@@ -294,6 +298,7 @@
     },
     "ko": {
         "tagline": "울트라와이드 화면에서 영상 양쪽의 검은 여백을 없앱니다",
+        "enabled": "사용",
         "modeLabel": "모드",
         "settings": "설정",
         "feedback": "문제 신고",
@@ -355,6 +360,7 @@
     },
     "es": {
         "tagline": "Quita las barras negras laterales en pantallas ultrawide",
+        "enabled": "Activado",
         "modeLabel": "Modo",
         "settings": "Ajustes",
         "feedback": "Informar un problema",
@@ -416,6 +422,7 @@
     },
     "fr": {
         "tagline": "Supprime les bandes noires latérales sur les écrans ultrawide",
+        "enabled": "Activé",
         "modeLabel": "Mode",
         "settings": "Réglages",
         "feedback": "Signaler un problème",
@@ -477,6 +484,7 @@
     },
     "de": {
         "tagline": "Entfernt die seitlichen schwarzen Balken auf Ultrawide-Bildschirmen",
+        "enabled": "Aktiv",
         "modeLabel": "Modus",
         "settings": "Einstellungen",
         "feedback": "Problem melden",
@@ -538,6 +546,7 @@
     },
     "pt": {
         "tagline": "Remove as barras pretas laterais em telas ultrawide",
+        "enabled": "Ativado",
         "modeLabel": "Modo",
         "settings": "Configurações",
         "feedback": "Reportar um problema",
@@ -599,6 +608,7 @@
     },
     "ru": {
         "tagline": "Убирает чёрные полосы по бокам на ультрашироких экранах",
+        "enabled": "Включено",
         "modeLabel": "Режим",
         "settings": "Настройки",
         "feedback": "Сообщить о проблеме",
@@ -660,6 +670,7 @@
     },
     "it": {
         "tagline": "Rimuove le barre nere laterali sugli schermi ultrawide",
+        "enabled": "Attivo",
         "modeLabel": "Modalità",
         "settings": "Impostazioni",
         "feedback": "Segnala un problema",
@@ -721,6 +732,7 @@
     },
     "tr": {
         "tagline": "Ultrawide ekranlarda videonun iki yanındaki siyah çubukları kaldırır",
+        "enabled": "Açık",
         "modeLabel": "Mod",
         "settings": "Ayarlar",
         "feedback": "Sorun bildir",
@@ -782,6 +794,7 @@
     },
     "vi": {
         "tagline": "Bỏ thanh đen hai bên trên màn hình ultrawide",
+        "enabled": "Bật",
         "modeLabel": "Chế độ",
         "settings": "Cài đặt",
         "feedback": "Báo lỗi",
@@ -843,6 +856,7 @@
     },
     "id": {
         "tagline": "Menghilangkan bilah hitam di kedua sisi pada layar ultrawide",
+        "enabled": "Aktif",
         "modeLabel": "Mode",
         "settings": "Setelan",
         "feedback": "Laporkan masalah",
@@ -904,6 +918,7 @@
     },
     "pt_BR": {
         "tagline": "Remove as barras pretas laterais em telas ultrawide",
+        "enabled": "Ativado",
         "modeLabel": "Modo",
         "settings": "Configurações",
         "feedback": "Reportar um problema",
@@ -965,6 +980,7 @@
     },
     "th": {
         "tagline": "เอาแถบดำสองข้างออกบนจอ ultrawide",
+        "enabled": "เปิดใช้",
         "modeLabel": "โหมด",
         "settings": "การตั้งค่า",
         "feedback": "รายงานปัญหา",
@@ -1026,6 +1042,7 @@
     },
     "pl": {
         "tagline": "Usuwa boczne czarne pasy na ekranach ultrawide",
+        "enabled": "Włączone",
         "modeLabel": "Tryb",
         "settings": "Ustawienia",
         "feedback": "Zgłoś problem",
@@ -1087,6 +1104,7 @@
     },
     "nl": {
         "tagline": "Haalt de zwarte balken aan de zijkant weg op ultrawide schermen",
+        "enabled": "Ingeschakeld",
         "modeLabel": "Modus",
         "settings": "Instellingen",
         "feedback": "Probleem melden",
@@ -1148,6 +1166,7 @@
     },
     "ar": {
         "tagline": "يزيل الأشرطة السوداء الجانبية على الشاشات فائقة العرض",
+        "enabled": "مفعّل",
         "modeLabel": "الوضع",
         "settings": "الإعدادات",
         "feedback": "الإبلاغ عن مشكلة",
@@ -1209,6 +1228,7 @@
     },
     "hi": {
         "tagline": "अल्ट्रावाइड स्क्रीन पर दोनों ओर की काली पट्टियाँ हटाता है",
+        "enabled": "चालू",
         "modeLabel": "मोड",
         "settings": "सेटिंग्स",
         "feedback": "समस्या बताएं",
@@ -1270,6 +1290,7 @@
     },
     "uk": {
         "tagline": "Прибирає бічні чорні смуги на ультрашироких екранах",
+        "enabled": "Увімкнено",
         "modeLabel": "Режим",
         "settings": "Налаштування",
         "feedback": "Повідомити про проблему",
@@ -1331,6 +1352,7 @@
     },
     "cs": {
         "tagline": "Odstraňuje boční černé pruhy na ultrawide obrazovkách",
+        "enabled": "Zapnuto",
         "modeLabel": "Režim",
         "settings": "Nastavení",
         "feedback": "Nahlásit problém",
@@ -1392,6 +1414,7 @@
     },
     "sv": {
         "tagline": "Tar bort de svarta sidostaplarna på ultrawide-skärmar",
+        "enabled": "På",
         "modeLabel": "Läge",
         "settings": "Inställningar",
         "feedback": "Rapportera ett problem",
@@ -1453,6 +1476,7 @@
     },
     "da": {
         "tagline": "Fjerner de sorte bjælker i siderne på ultrawide-skærme",
+        "enabled": "Aktiveret",
         "modeLabel": "Tilstand",
         "settings": "Indstillinger",
         "feedback": "Rapportér et problem",
@@ -1514,6 +1538,7 @@
     },
     "fi": {
         "tagline": "Poistaa sivujen mustat palkit ultrawide-näytöillä",
+        "enabled": "Käytössä",
         "modeLabel": "Tila",
         "settings": "Asetukset",
         "feedback": "Ilmoita ongelmasta",
@@ -1575,6 +1600,7 @@
     },
     "no": {
         "tagline": "Fjerner de svarte sidefeltene på ultrawide-skjermer",
+        "enabled": "På",
         "modeLabel": "Modus",
         "settings": "Innstillinger",
         "feedback": "Rapporter et problem",
@@ -1636,6 +1662,7 @@
     },
     "el": {
         "tagline": "Αφαιρεί τις μαύρες μπάρες στα πλάγια σε οθόνες ultrawide",
+        "enabled": "Ενεργό",
         "modeLabel": "Λειτουργία",
         "settings": "Ρυθμίσεις",
         "feedback": "Αναφορά προβλήματος",
@@ -1697,6 +1724,7 @@
     },
     "he": {
         "tagline": "מסיר את הפסים השחורים בצדדים במסכים רחבים במיוחד",
+        "enabled": "פעיל",
         "modeLabel": "מצב",
         "settings": "הגדרות",
         "feedback": "דיווח על בעיה",
@@ -1758,6 +1786,7 @@
     },
     "ro": {
         "tagline": "Elimină barele negre laterale pe ecranele ultrawide",
+        "enabled": "Activat",
         "modeLabel": "Mod",
         "settings": "Setări",
         "feedback": "Raportează o problemă",
@@ -1819,6 +1848,7 @@
     },
     "hu": {
         "tagline": "Eltávolítja az oldalsó fekete sávokat az ultrawide képernyőkön",
+        "enabled": "Bekapcsolva",
         "modeLabel": "Mód",
         "settings": "Beállítások",
         "feedback": "Hiba jelentése",
@@ -1880,6 +1910,7 @@
     },
     "ms": {
         "tagline": "Buang bar hitam di kedua-dua sisi pada skrin ultrawide",
+        "enabled": "Diaktifkan",
         "modeLabel": "Mod",
         "settings": "Tetapan",
         "feedback": "Laporkan masalah",
@@ -1941,6 +1972,7 @@
     },
     "fil": {
         "tagline": "Tinatanggal ang mga itim na bar sa gilid ng ultrawide na screen",
+        "enabled": "Diaktifkan",
         "modeLabel": "Paraan",
         "settings": "Mga setting",
         "feedback": "Laporkan masalah",
@@ -2002,6 +2034,7 @@
     },
     "bn": {
         "tagline": "আলট্রাওয়াইড পর্দায় দুই পাশের কালো দণ্ড সরায়",
+        "enabled": "চালু",
         "modeLabel": "ধরন",
         "settings": "সেটিংস",
         "feedback": "সমস্যা জানান",
@@ -2063,6 +2096,7 @@
     },
     "ca": {
         "tagline": "Treu les barres negres laterals a les pantalles ultrawide",
+        "enabled": "Activat",
         "modeLabel": "Mode",
         "settings": "Paràmetres",
         "feedback": "Informa d'un problema",
@@ -2124,6 +2158,7 @@
     },
     "sk": {
         "tagline": "Odstraňuje bočné čierne pruhy na ultrawide obrazovkách",
+        "enabled": "Zapnuté",
         "modeLabel": "Režim",
         "settings": "Nastavenia",
         "feedback": "Nahlásiť problém",
@@ -2185,6 +2220,7 @@
     },
     "hr": {
         "tagline": "Uklanja bočne crne trake na ultrawide zaslonima",
+        "enabled": "Uključeno",
         "modeLabel": "Način",
         "settings": "Postavke",
         "feedback": "Prijavi problem",
@@ -2246,6 +2282,7 @@
     },
     "bg": {
         "tagline": "Маха страничните черни ленти на ултрашироки екрани",
+        "enabled": "Включено",
         "modeLabel": "Режим",
         "settings": "Настройки",
         "feedback": "Докладвай проблем",
@@ -2307,6 +2344,7 @@
     },
     "sr": {
         "tagline": "Уклања бочне црне траке на ултрашироким екранима",
+        "enabled": "Uključeno",
         "modeLabel": "Режим",
         "settings": "Подешавања",
         "feedback": "Prijavi problem",
@@ -2368,6 +2406,7 @@
     },
     "lt": {
         "tagline": "Pašalina šonines juodas juostas ultrabroad ekranuose",
+        "enabled": "Įjungta",
         "modeLabel": "Režimas",
         "settings": "Nustatymai",
         "feedback": "Pranešti apie problemą",
@@ -2429,6 +2468,7 @@
     },
     "sl": {
         "tagline": "Odstrani stranske črne pasove na ultrawide zaslonih",
+        "enabled": "Vklopljeno",
         "modeLabel": "Način",
         "settings": "Nastavitve",
         "feedback": "Prijavi težavo",
@@ -2490,6 +2530,7 @@
     },
     "et": {
         "tagline": "Eemaldab külgmised mustad ribad ultrawide ekraanidel",
+        "enabled": "Sees",
         "modeLabel": "Režiim",
         "settings": "Sätted",
         "feedback": "Teata probleemist",
@@ -2551,6 +2592,7 @@
     },
     "lv": {
         "tagline": "Noņem sānu melnās joslas ultrawide ekrānos",
+        "enabled": "Ieslēgts",
         "modeLabel": "Režīms",
         "settings": "Iestatījumi",
         "feedback": "Ziņot par problēmu",
@@ -2612,6 +2654,7 @@
     },
     "fa": {
         "tagline": "نوارهای سیاه دو طرف را در نمایشگرهای خیلی‌عریض برمی‌دارد",
+        "enabled": "فعال",
         "modeLabel": "حالت",
         "settings": "تنظیمات",
         "feedback": "گزارش مشکل",
@@ -2673,6 +2716,7 @@
     },
     "sw": {
         "tagline": "Huondoa mistari myeusi ya kando kwenye skrini pana za ultrawide",
+        "enabled": "Imewashwa",
         "modeLabel": "Hali",
         "settings": "Mipangilio",
         "feedback": "Ripoti tatizo",
