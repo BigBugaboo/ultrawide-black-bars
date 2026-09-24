@@ -18,6 +18,7 @@ var langOptions = document.querySelectorAll("#lang-menu button");
 var langSearch = document.querySelector("#lang-search");
 var langEmpty = document.querySelector("#lang-empty");
 var openSettings = document.querySelector("#open-settings");
+var feedback = document.querySelector("#feedback");
 
 
 function t(key) {
@@ -59,6 +60,7 @@ function render() {
   if (langEmpty) langEmpty.textContent = t("languageEmpty");
   applyLangFilter();
   if (openSettings) openSettings.textContent = t("settings");
+  if (feedback) feedback.textContent = t("feedback");
 }
 
 function persist(patch) {

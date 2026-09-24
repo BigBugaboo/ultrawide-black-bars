@@ -193,6 +193,8 @@ assert.doesNotMatch(popupHtml, /id="enabled"/);
 assert.doesNotMatch(popupHtml, /<select/);
 assert.match(popupHtml, /id="lang-toggle"/);
 assert.match(popupHtml, /id="open-settings"/);
+assert.match(popupHtml, /id="feedback"/);
+assert.match(popupHtml, /issues\/new\/choose/);
 assert.match(popupHtml, /data-blur="medium"/);
 assert.match(popupHtml, /data-music-style="breath"/);
 

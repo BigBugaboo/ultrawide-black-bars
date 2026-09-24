@@ -1,0 +1,34 @@
+name: 功能建议
+description: 希望增加网站、模式或设置
+title: "[建议] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 想解决什么
+      placeholder: 在某个网站上看片时，两侧黑边没有被处理
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: 希望怎么做
+    validations:
+      required: true
+  - type: dropdown
+    id: site
+    attributes:
+      label: 相关网站
+      options:
+        - 不限
+        - Bilibili
+        - YouTube
+        - Twitch
+        - Netflix
+        - Prime Video
+        - Disney+
+        - Max
+        - 其他
+    validations:
+      required: true

@@ -62,7 +62,9 @@ h1 {
   max-width: 46%;
 }
 
-button.link {
+button.link,
+a.link {
+  cursor: pointer;
   border: 0;
   background: none;
   padding: 2px 0;
@@ -182,11 +184,24 @@ button.link {
   border-color: transparent;
 }
 
-button.settings-link {
+.popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+button.settings-link,
+a.feedback-link {
   display: inline-block;
   width: auto;
-  margin-top: 14px;
+  margin-top: 0;
   text-align: left;
+}
+
+a.feedback-link {
+  text-align: right;
 }
 
 p {

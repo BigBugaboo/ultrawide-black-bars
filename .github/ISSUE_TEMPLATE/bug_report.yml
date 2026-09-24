@@ -1,0 +1,69 @@
+name: 反馈问题
+description: 播放效果不对、某个网站打不开，或扩展报错
+title: "[问题] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请尽量写清发生了什么。不用贴账号密码或完整观看链接。
+  - type: dropdown
+    id: site
+    attributes:
+      label: 网站
+      options:
+        - Bilibili
+        - YouTube
+        - Twitch
+        - Netflix
+        - Prime Video
+        - Disney+
+        - Max
+        - 其他
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: 模式
+      options:
+        - 原比例
+        - 环境光
+        - 音乐 / 音柱
+        - 音乐 / 雨滴
+        - 音乐 / 呼吸灯
+        - 铺满
+        - 不确定
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 扩展版本
+      description: 在 chrome://extensions 里查看，例如 1.0.0
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际表现
+      placeholder: 画面没有变化 / 音柱不出现 / 设置打不开
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望表现
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 重现步骤
+      placeholder: |
+        1. 打开……
+        2. 选择……
+        3. 看到……
+    validations:
+      required: true
