@@ -129,7 +129,7 @@
     state.ambientVideos = [];
   }
 
-  function releaseTrackedElements() {
+  function releaseVideoState() {
     if (state.video) {
       if (state.syncPlayback) {
         state.video.removeEventListener('play', state.syncPlayback);
@@ -140,6 +140,11 @@
       delete state.video.dataset.ubbOriginalObjectFit;
     }
 
+    state.video = null;
+    state.syncPlayback = null;
+  }
+
+  function releaseAmbient() {
     if (state.wrapper) {
       state.wrapper.classList.remove('ubb-wrapper');
       delete state.wrapper.dataset.ubbMode;
@@ -152,10 +157,13 @@
     }
 
     state.wrapper = null;
-    state.video = null;
     state.ambient = null;
-    state.syncPlayback = null;
     state.ambientSupported = true;
+  }
+
+  function releaseTrackedElements() {
+    releaseVideoState();
+    releaseAmbient();
   }
 
   function playAmbientVideos() {
@@ -169,14 +177,8 @@
       return;
     }
 
-    releaseTrackedElements();
-
+    releaseAmbient();
     state.wrapper = wrapper;
-    state.video = video;
-
-    if (!state.video.dataset.ubbOriginalObjectFit) {
-      state.video.dataset.ubbOriginalObjectFit = state.video.style.objectFit || '';
-    }
 
     state.wrapper.classList.add('ubb-wrapper');
 
@@ -256,14 +258,31 @@
       return;
     }
 
-    ensureAmbient(wrapper, video);
+    if (state.video !== video) {
+      releaseVideoState();
+      state.video = video;
+
+      if (!state.video.dataset.ubbOriginalObjectFit) {
+        state.video.dataset.ubbOriginalObjectFit = state.video.style.objectFit || '';
+      }
+    }
+
+    if (state.requestedMode === 'ambient') {
+      ensureAmbient(wrapper, video);
+    }
 
     const preferredMode =
       state.requestedMode === 'ambient' && !state.ambientSupported
         ? 'original'
         : state.requestedMode;
     const effectiveMode = isUltrawideViewport() ? preferredMode : 'original';
-    state.wrapper.dataset.ubbMode = effectiveMode;
+
+    if (effectiveMode === 'ambient') {
+      state.wrapper.dataset.ubbMode = effectiveMode;
+    } else if (state.ambient) {
+      releaseAmbient();
+    }
+
     state.video.style.objectFit =
       effectiveMode === 'crop'
         ? 'cover'
@@ -283,6 +302,37 @@
 
       showToast(`${MODE_LABELS[state.requestedMode]}${suffix}`);
     }
+  }
+
+  function isRelevantNode(node) {
+    if (!(node instanceof Element)) {
+      return false;
+    }
+
+    const selector = 'video, .bpx-player-video-area, .bpx-player-video-wrap, .bilibili-player-video-wrap, .bilibili-player-video';
+    return node.matches(selector) || Boolean(node.querySelector(selector));
+  }
+
+  function hasRelevantMutation(mutations) {
+    if (state.video && !document.contains(state.video)) {
+      return true;
+    }
+
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (isRelevantNode(node)) {
+          return true;
+        }
+      }
+
+      for (const node of mutation.removedNodes) {
+        if (isRelevantNode(node)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   function scheduleSync(showFeedback = false) {
@@ -324,7 +374,11 @@
       }
     });
 
-    const observer = new MutationObserver(() => scheduleSync(false));
+    const observer = new MutationObserver((mutations) => {
+      if (hasRelevantMutation(mutations)) {
+        scheduleSync(false);
+      }
+    });
     observer.observe(document.documentElement, { childList: true, subtree: true });
 
     window.addEventListener('resize', () => scheduleSync(false));
