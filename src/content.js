@@ -254,13 +254,33 @@
     return layout.pictureRect(videoEl.clientWidth, videoEl.clientHeight, videoEl.videoWidth, videoEl.videoHeight);
   }
 
+  function sideInsets(rect) {
+    var areaBox = area.getBoundingClientRect();
+    var videoBox = video.getBoundingClientRect();
+    var vw = video.clientWidth || videoBox.width || 1;
+    var vh = video.clientHeight || videoBox.height || 1;
+    var pictureLeft = videoBox.left + (rect.x / vw) * videoBox.width;
+    var pictureRight = videoBox.left + ((rect.x + rect.width) / vw) * videoBox.width;
+    var pictureTop = videoBox.top + (rect.y / vh) * videoBox.height;
+    var pictureBottom = videoBox.top + ((rect.y + rect.height) / vh) * videoBox.height;
+    return {
+      left: Math.max(0, pictureLeft - areaBox.left),
+      right: Math.max(0, areaBox.right - pictureRight),
+      top: Math.max(0, pictureTop - areaBox.top),
+      bottom: Math.max(0, areaBox.bottom - pictureBottom),
+      height: areaBox.height || video.clientHeight,
+    };
+  }
+
   function placeBars(rect) {
-    var boxW = video.clientWidth;
-    var boxH = video.clientHeight;
-    leftBar.style.width = Math.max(0, rect.x) + "px";
-    rightBar.style.width = Math.max(0, boxW - rect.x - rect.width) + "px";
-    topBar.style.height = Math.max(0, rect.y) + "px";
-    bottomBar.style.height = Math.max(0, boxH - rect.y - rect.height) + "px";
+    var insets = sideInsets(rect);
+    leftBar.style.left = "0px";
+    leftBar.style.width = insets.left + "px";
+    rightBar.style.right = "0px";
+    rightBar.style.width = insets.right + "px";
+    topBar.style.height = insets.top + "px";
+    bottomBar.style.height = insets.bottom + "px";
+    return insets;
   }
 
   function fillCanvas(canvas) {
@@ -673,10 +693,10 @@
       return;
     }
     useSideChrome("music");
-    placeBars(rect);
-    var sideH = video.clientHeight || rect.boxH || rect.height;
-    var leftW = Math.max(rect.x || 0, 8);
-    var rightW = Math.max((rect.boxW || video.clientWidth || 0) - (rect.x || 0) - (rect.width || 0), 8);
+    var insets = placeBars(rect);
+    var sideH = insets.height || video.clientHeight || rect.boxH || rect.height;
+    var leftW = insets.left;
+    var rightW = insets.right;
     var audio = attachMusic(video);
     resumeMusic();
     var left = audio && audio.ok ? readBands(audio.left) : layout.musicBands(null, 8);
