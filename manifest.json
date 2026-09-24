@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Ultrawide Black Bars",
+  "version": "0.1.0",
+  "description": "Remove Bilibili side black bars on ultrawide monitors with original, crop, and ambient modes.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.bilibili.com/video/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "commands": {
+    "cycle-mode": {
+      "suggested_key": {
+        "default": "Alt+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "Cycle Ultrawide Black Bars modes"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/video/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
