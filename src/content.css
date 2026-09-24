@@ -121,26 +121,6 @@ video.ubb-sharpen {
   display: none;
 }
 
-ytd-watch-flexy.ubb-wide #primary,
-ytd-watch-flexy.ubb-wide #player,
-ytd-watch-flexy.ubb-wide #player-container,
-ytd-watch-flexy.ubb-wide #player-container-inner,
-ytd-watch-flexy.ubb-wide #movie_player {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-ytd-watch-flexy.ubb-wide #player,
-ytd-watch-flexy.ubb-wide #movie_player {
-  height: 72vh !important;
-}
-
-ytd-watch-flexy.ubb-wide video.html5-main-video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-}
-
 .ubb-toast {
   position: absolute;
   left: 50%;

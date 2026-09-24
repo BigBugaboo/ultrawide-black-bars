@@ -949,14 +949,6 @@
       resizeObserver.observe(area);
     }
 
-    if (site.id === "youtube" && location.pathname.indexOf("/shorts/") !== 0) {
-      var flexy = document.querySelector("ytd-watch-flexy");
-      if (flexy) {
-        if (mode === "original") flexy.classList.remove("ubb-wide");
-        else flexy.classList.add("ubb-wide");
-        void flexy.offsetHeight;
-      }
-    }
     var rect = rectOf(video);
     if (!rect) {
       stopAmbientLoop();
