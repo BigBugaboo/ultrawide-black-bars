@@ -1,0 +1,34 @@
+name: Feature request
+description: A site, mode, or setting you want added
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you want solved
+      placeholder: Side bars are still there on a site I watch
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you would like
+    validations:
+      required: true
+  - type: dropdown
+    id: site
+    attributes:
+      label: Site
+      options:
+        - Any
+        - Bilibili
+        - YouTube
+        - Twitch
+        - Netflix
+        - Prime Video
+        - Disney+
+        - Max
+        - Other
+    validations:
+      required: true

@@ -1,0 +1,69 @@
+name: Report a problem
+description: Playback looks wrong, a site does not respond, or the extension errors
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe what happened. Do not include account passwords or a full watch URL.
+  - type: dropdown
+    id: site
+    attributes:
+      label: Site
+      options:
+        - Bilibili
+        - YouTube
+        - Twitch
+        - Netflix
+        - Prime Video
+        - Disney+
+        - Max
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - Original
+        - Ambient
+        - Music / Bars
+        - Music / Raindrops
+        - Music / Color wash
+        - Fill
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      description: Find it at chrome://extensions, for example 1.0.0
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      placeholder: The picture did not change / bars did not appear / settings did not open
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open…
+        2. Choose…
+        3. See…
+    validations:
+      required: true
