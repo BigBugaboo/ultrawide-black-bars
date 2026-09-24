@@ -766,7 +766,18 @@
     }
   }
 
+  function youtubeWatch() {
+    return site && site.id === "youtube" && location.pathname.indexOf("/shorts/") !== 0;
+  }
+
+  function syncYoutubeFill(on) {
+    var flexy = document.querySelector("ytd-watch-flexy");
+    if (flexy) flexy.classList.toggle("ubb-fill", !!on);
+    if (area && area.id === "movie_player") area.classList.toggle("ubb-fill", !!on);
+  }
+
   function turnOff() {
+    syncYoutubeFill(false);
     stopAmbientLoop();
     if (video) video.classList.remove("ubb-sharpen");
     if (resizeObserver) resizeObserver.disconnect();
@@ -967,6 +978,8 @@
       resizeObserver.observe(area);
     }
 
+    var fillYoutube = youtubeWatch() && mode === "crop";
+    syncYoutubeFill(fillYoutube);
     var rect = rectOf(video);
     if (!rect) {
       stopAmbientLoop();
@@ -974,6 +987,18 @@
       return;
     }
     var probe = probeBars(video);
+    if (fillYoutube) {
+      stopAmbientLoop();
+      clearEffects();
+      var frameScales = layout.modeScales({ coverScale: 1 }, mode, zoom, probe.failed ? null : probe.bars);
+      if (frameScales.x > 1.02 || frameScales.y > 1.02) {
+        area.classList.add("ubb-player", "ubb-crop");
+        setTransform(frameScales);
+        markTargets();
+      }
+      applySharpen();
+      return;
+    }
     var plan = layout.visualPlan({
       rect: rect,
       mode: mode,
