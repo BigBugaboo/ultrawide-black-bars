@@ -132,6 +132,7 @@ ytd-watch-flexy.ubb-fill #movie_player {
 
 ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player,
 ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container-outer,
+ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container-inner,
 ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container,
 ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #ytd-player,
 ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #ytd-player > #container,

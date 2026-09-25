@@ -166,7 +166,7 @@ assert.match(content, /sitePrefs/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbient/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbientFrame/);
 assert.match(content, /if\s*\(\s*!enabled\s*\)/);
-assert.match(content, /ubb-fill/);
+assert.match(content, /setProperty\("height", height, "important"\)/);
 const contentCss = readFileSync(new URL("../src/content.css", import.meta.url), "utf8");
 assert.match(contentCss, /#movie_player\.ubb-fill video\.html5-main-video[\s\S]*object-fit:\s*cover/);
 assert.match(contentCss, /bottom:\s*0 !important/);

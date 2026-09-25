@@ -774,6 +774,94 @@
     var flexy = document.querySelector("ytd-watch-flexy");
     if (flexy) flexy.classList.toggle("ubb-fill", !!on);
     if (area && area.id === "movie_player") area.classList.toggle("ubb-fill", !!on);
+    if (on) watchYoutubeFill();
+    else clearYoutubeFillPins();
+  }
+
+  var fillPin = 0;
+
+  function youtubeFillHeight() {
+    return Math.max(1, Math.round(window.innerHeight * 0.72)) + "px";
+  }
+
+  function youtubeFillBoxes() {
+    return [
+      document.querySelector("#player"),
+      document.querySelector("#player-container-outer"),
+      document.querySelector("#player-container-inner"),
+      document.querySelector("#player-container"),
+      document.querySelector("#ytd-player"),
+      document.querySelector("#ytd-player > #container"),
+      area
+    ];
+  }
+
+  function pinYoutubeFill() {
+    if (!area || area.id !== "movie_player" || !video) return;
+    var height = youtubeFillHeight();
+    var boxes = youtubeFillBoxes();
+    for (var i = 0; i < boxes.length; i++) {
+      var el = boxes[i];
+      if (!el) continue;
+      if (el.style.getPropertyPriority("height") !== "important" || el.style.height !== height) {
+        el.style.setProperty("height", height, "important");
+        el.style.setProperty("max-height", "none", "important");
+      }
+    }
+    var container = area.querySelector(".html5-video-container");
+    if (container && container.style.getPropertyPriority("height") !== "important") {
+      container.style.setProperty("position", "absolute", "important");
+      container.style.setProperty("top", "0px", "important");
+      container.style.setProperty("right", "0px", "important");
+      container.style.setProperty("bottom", "0px", "important");
+      container.style.setProperty("left", "0px", "important");
+      container.style.setProperty("width", "100%", "important");
+      container.style.setProperty("height", "100%", "important");
+    }
+    if (video.style.getPropertyPriority("object-fit") !== "important" || video.style.height !== "100%") {
+      video.style.setProperty("position", "absolute", "important");
+      video.style.setProperty("left", "0px", "important");
+      video.style.setProperty("top", "0px", "important");
+      video.style.setProperty("width", "100%", "important");
+      video.style.setProperty("height", "100%", "important");
+      video.style.setProperty("max-height", "none", "important");
+      video.style.setProperty("object-fit", "cover", "important");
+    }
+  }
+
+  function clearYoutubeFillPins() {
+    if (fillPin) cancelAnimationFrame(fillPin);
+    fillPin = 0;
+    var boxes = youtubeFillBoxes();
+    for (var i = 0; i < boxes.length; i++) {
+      var el = boxes[i];
+      if (!el || el.style.getPropertyPriority("height") !== "important") continue;
+      el.style.removeProperty("height");
+      el.style.removeProperty("max-height");
+    }
+    if (!video) return;
+    if (video.style.getPropertyPriority("object-fit") === "important") {
+      video.style.removeProperty("position");
+      video.style.removeProperty("left");
+      video.style.removeProperty("top");
+      video.style.removeProperty("width");
+      video.style.removeProperty("height");
+      video.style.removeProperty("max-height");
+      video.style.removeProperty("object-fit");
+    }
+  }
+
+  function watchYoutubeFill() {
+    if (fillPin) return;
+    var step = function () {
+      if (!enabled || mode !== "crop" || !youtubeWatch()) {
+        fillPin = 0;
+        return;
+      }
+      pinYoutubeFill();
+      fillPin = requestAnimationFrame(step);
+    };
+    fillPin = requestAnimationFrame(step);
   }
 
   function turnOff() {
