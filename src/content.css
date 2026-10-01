@@ -121,26 +121,6 @@ video.ubb-sharpen {
   display: none;
 }
 
-ytd-watch-flexy.ubb-fill #primary,
-ytd-watch-flexy.ubb-fill #player,
-ytd-watch-flexy.ubb-fill #player-container,
-ytd-watch-flexy.ubb-fill #player-container-inner,
-ytd-watch-flexy.ubb-fill #movie_player {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container-outer,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container-inner,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #player-container,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #ytd-player,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #ytd-player > #container,
-ytd-watch-flexy.ubb-fill:not(:has(#movie_player:fullscreen)) #movie_player {
-  height: 72vh !important;
-  max-height: none !important;
-}
-
 #movie_player.ubb-fill .html5-video-container {
   position: absolute !important;
   top: 0 !important;

@@ -166,10 +166,14 @@ assert.match(content, /sitePrefs/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbient/);
 assert.doesNotMatch(content, /setInterval\(\s*paintAmbientFrame/);
 assert.match(content, /if\s*\(\s*!enabled\s*\)/);
-assert.match(content, /setProperty\("height", height, "important"\)/);
+assert.match(content, /document\.hidden/);
+assert.match(content, /bandScratch/);
+assert.match(content, /musicAudio\.ctx\.close/);
+assert.doesNotMatch(content, /72vh/);
 const contentCss = readFileSync(new URL("../src/content.css", import.meta.url), "utf8");
 assert.match(contentCss, /#movie_player\.ubb-fill video\.html5-main-video[\s\S]*object-fit:\s*cover/);
 assert.match(contentCss, /bottom:\s*0 !important/);
+assert.doesNotMatch(contentCss, /72vh/);
 
 const background = readFileSync(new URL("../src/background.js", import.meta.url), "utf8");
 assert.doesNotMatch(background, /importScripts/);

@@ -371,8 +371,39 @@
     }
   }
 
+  function parkMusic() {
+    if (!musicAudio || !musicAudio.ok || musicAudio.parked) return;
+    try {
+      musicAudio.splitter.disconnect();
+    } catch (err) {}
+    musicAudio.parked = true;
+  }
+
+  function unparkMusic() {
+    if (!musicAudio || !musicAudio.ok || !musicAudio.parked) return;
+    try {
+      musicAudio.splitter.connect(musicAudio.left, 0);
+      musicAudio.splitter.connect(musicAudio.right, 1);
+    } catch (err) {}
+    musicAudio.parked = false;
+  }
+
+  function releaseMusic() {
+    if (musicAudio && musicAudio.ctx) {
+      try {
+        musicAudio.ctx.close();
+      } catch (err) {}
+    }
+    musicAudio = null;
+    musicFor = null;
+  }
+
   function attachMusic(videoEl) {
-    if (musicFor === videoEl && musicAudio) return musicAudio;
+    if (musicFor && musicFor !== videoEl) releaseMusic();
+    if (musicFor === videoEl && musicAudio) {
+      unparkMusic();
+      return musicAudio;
+    }
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) {
       musicFor = videoEl;
@@ -394,7 +425,7 @@
       splitter.connect(right, 1);
       source.connect(ctx.destination);
       musicFor = videoEl;
-      musicAudio = { ok: true, ctx: ctx, left: left, right: right };
+      musicAudio = { ok: true, ctx: ctx, source: source, splitter: splitter, left: left, right: right, parked: false };
       resumeMusic();
       return musicAudio;
     } catch (err) {
@@ -404,17 +435,23 @@
     }
   }
 
+  var bandScratch = new Uint8Array(0);
+  var energyScratch = new Uint8Array(0);
+
   function readBands(analyser) {
     if (!analyser) return layout.musicBands(null, 8);
-    var data = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(data);
-    return layout.musicBands(data, 8);
+    var size = analyser.frequencyBinCount;
+    if (bandScratch.length !== size) bandScratch = new Uint8Array(size);
+    analyser.getByteFrequencyData(bandScratch);
+    return layout.musicBands(bandScratch, 8);
   }
 
   function readEnergy(analyser) {
     if (!analyser) return 0;
-    var data = new Uint8Array(analyser.fftSize);
-    analyser.getByteTimeDomainData(data);
+    var size = analyser.fftSize;
+    if (energyScratch.length !== size) energyScratch = new Uint8Array(size);
+    analyser.getByteTimeDomainData(energyScratch);
+    var data = energyScratch;
     var sum = 0;
     for (var i = 0; i < data.length; i++) {
       var v = (data[i] - 128) / 128;
@@ -770,98 +807,17 @@
     return site && site.id === "youtube" && location.pathname.indexOf("/shorts/") !== 0;
   }
 
+  function playerNeedsCover() {
+    if (!area || !video || !(video.videoWidth > 0)) return false;
+    var box = area.getBoundingClientRect();
+    var fitted = layout.pictureRect(box.width, box.height, video.videoWidth, video.videoHeight);
+    return !!(fitted && (fitted.sideBars || fitted.letterBars));
+  }
+
   function syncYoutubeFill(on) {
     var flexy = document.querySelector("ytd-watch-flexy");
-    if (flexy) flexy.classList.toggle("ubb-fill", !!on);
+    if (flexy) flexy.classList.remove("ubb-fill");
     if (area && area.id === "movie_player") area.classList.toggle("ubb-fill", !!on);
-    if (on) watchYoutubeFill();
-    else clearYoutubeFillPins();
-  }
-
-  var fillPin = 0;
-
-  function youtubeFillHeight() {
-    return Math.max(1, Math.round(window.innerHeight * 0.72)) + "px";
-  }
-
-  function youtubeFillBoxes() {
-    return [
-      document.querySelector("#player"),
-      document.querySelector("#player-container-outer"),
-      document.querySelector("#player-container-inner"),
-      document.querySelector("#player-container"),
-      document.querySelector("#ytd-player"),
-      document.querySelector("#ytd-player > #container"),
-      area
-    ];
-  }
-
-  function pinYoutubeFill() {
-    if (!area || area.id !== "movie_player" || !video) return;
-    var height = youtubeFillHeight();
-    var boxes = youtubeFillBoxes();
-    for (var i = 0; i < boxes.length; i++) {
-      var el = boxes[i];
-      if (!el) continue;
-      if (el.style.getPropertyPriority("height") !== "important" || el.style.height !== height) {
-        el.style.setProperty("height", height, "important");
-        el.style.setProperty("max-height", "none", "important");
-      }
-    }
-    var container = area.querySelector(".html5-video-container");
-    if (container && container.style.getPropertyPriority("height") !== "important") {
-      container.style.setProperty("position", "absolute", "important");
-      container.style.setProperty("top", "0px", "important");
-      container.style.setProperty("right", "0px", "important");
-      container.style.setProperty("bottom", "0px", "important");
-      container.style.setProperty("left", "0px", "important");
-      container.style.setProperty("width", "100%", "important");
-      container.style.setProperty("height", "100%", "important");
-    }
-    if (video.style.getPropertyPriority("object-fit") !== "important" || video.style.height !== "100%") {
-      video.style.setProperty("position", "absolute", "important");
-      video.style.setProperty("left", "0px", "important");
-      video.style.setProperty("top", "0px", "important");
-      video.style.setProperty("width", "100%", "important");
-      video.style.setProperty("height", "100%", "important");
-      video.style.setProperty("max-height", "none", "important");
-      video.style.setProperty("object-fit", "cover", "important");
-    }
-  }
-
-  function clearYoutubeFillPins() {
-    if (fillPin) cancelAnimationFrame(fillPin);
-    fillPin = 0;
-    var boxes = youtubeFillBoxes();
-    for (var i = 0; i < boxes.length; i++) {
-      var el = boxes[i];
-      if (!el || el.style.getPropertyPriority("height") !== "important") continue;
-      el.style.removeProperty("height");
-      el.style.removeProperty("max-height");
-    }
-    if (!video) return;
-    if (video.style.getPropertyPriority("object-fit") === "important") {
-      video.style.removeProperty("position");
-      video.style.removeProperty("left");
-      video.style.removeProperty("top");
-      video.style.removeProperty("width");
-      video.style.removeProperty("height");
-      video.style.removeProperty("max-height");
-      video.style.removeProperty("object-fit");
-    }
-  }
-
-  function watchYoutubeFill() {
-    if (fillPin) return;
-    var step = function () {
-      if (!enabled || mode !== "crop" || !youtubeWatch()) {
-        fillPin = 0;
-        return;
-      }
-      pinYoutubeFill();
-      fillPin = requestAnimationFrame(step);
-    };
-    fillPin = requestAnimationFrame(step);
   }
 
   function turnOff() {
@@ -916,6 +872,7 @@
       video.removeEventListener("loadeddata", onPlayback);
       video.classList.remove("ubb-sharpen");
     }
+    if (musicFor && musicFor !== next) releaseMusic();
     stopAmbientLoop();
     video = next;
     barCache = { video: null, at: 0, value: null };
@@ -1066,15 +1023,16 @@
       resizeObserver.observe(area);
     }
 
-    var fillYoutube = youtubeWatch() && mode === "crop";
+    var fillYoutube = youtubeWatch() && mode === "crop" && playerNeedsCover();
     syncYoutubeFill(fillYoutube);
+    if (mode !== "music") parkMusic();
     var rect = rectOf(video);
     if (!rect) {
       stopAmbientLoop();
       clearEffects();
       return;
     }
-    var probe = probeBars(video);
+    var probe = mode === "original" || document.hidden ? { failed: false, bars: null } : probeBars(video);
     if (fillYoutube) {
       stopAmbientLoop();
       clearEffects();
@@ -1186,7 +1144,20 @@
     });
   }
 
-  setInterval(apply, 1000);
+  function backgroundTick() {
+    if (document.hidden || !enabled) return;
+    if (mode === "original" && !(zoom > 1.001) && !panX && !panY) return;
+    if (video && (video.paused || video.ended)) return;
+    apply();
+  }
+
+  setInterval(backgroundTick, 1000);
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) apply();
+  });
+
+  document.addEventListener("pagehide", releaseMusic);
 
   document.addEventListener("pointerdown", function () {
     if (mode === "music") resumeMusic();
